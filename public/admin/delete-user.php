@@ -12,14 +12,19 @@ require '../include/header.php';
 $helper = new Helper($conn);
 
 $users = $helper->getAllUsers();
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $ids = implode(',', $_POST['user_ids']);
-
-    $sql = mysqli_query($conn, "delete from user_info where id in ($ids)");
-
-    header("Location: dashboard.php");
+        
+    if (empty($_POST['user_ids'])) {
+        $error = "select any user.";
+    } else {
+        $ids = implode(',', $_POST['user_ids']);
+    
+        $sql = mysqli_query($conn, "delete from user_info where id in ($ids)");
+    
+        header("Location: dashboard.php");
+    }
 }
 
 ?>
@@ -37,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <div class="delete-users">
             <h2>Users</h2>
+            <span class="error"><?php echo $error; ?></span>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <table class="user-table">
                     <tr>
@@ -58,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         } ?>
                 </table>
-                <button type="submit" class="btn-delete">Delete</button>
+                <button type="submit" class="btn-delete" onclick="return confirm('Sure to delete?')">Delete</button>
             </form>
 
         </div>
