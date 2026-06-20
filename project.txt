@@ -22,7 +22,7 @@ Create a Private Cloud-Based Document Sharing Platform
   → Basic profile management.
 
 • Admin panel
-  → Admin can see all users.
+  ✓ Admin can see all users.
   → Admin can see total storage usage.
   → Admin can instantly grant or revoke access.
   → Admin credentials must be provided.
@@ -93,7 +93,7 @@ A) User Management
 ✓ View all registered users
 ✓ Activate / deactivate users
 ✓ Delete users
-→ Reset user passwords (optional)
+✓ Reset user passwords (optional)
 
 B) Storage Monitoring
 → View total system storage usage

@@ -47,6 +47,12 @@ td {
   background-color: #333;
 }
 
+.container .profile-table {
+  border-collapse: collapse;
+  margin: 10px;
+  margin-bottom: 30px;
+}
+
 .error {
   color: red;
   text-transform: capitalize;
@@ -166,6 +172,19 @@ button {
   margin: 10px;
   background-color: #fd0000;
   color: white;
+}
+
+.btn-update {
+  margin: 10px;
+  padding: 10px;
+  background-color: #b7f9fd;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.685);
+  text-decoration: none;
+}
+
+.btn-update:hover {
+  color: black;
 }
 
 .dashboard .name, .delete-users .name {

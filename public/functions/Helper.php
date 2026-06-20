@@ -27,7 +27,7 @@ class Helper
     function alreadyLoggedIn()
     {
         if (!empty($_SESSION)) {
-            die('already logged in');
+            header("Location: ../user/profile.php");
         }
     }
 
@@ -61,6 +61,12 @@ class Helper
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->conn->prepare('insert into user_info (name, email, password) value (?, ?, ?)');
         $stmt->bind_param('sss', $name, $email, $hash);
+        $stmt->execute();
+    }
+
+    function updateUser($id, $name, $email) {
+        $stmt = $this->conn->prepare('update user_info set name = ?, email = ? where id = ?');
+        $stmt->bind_param('ssi', $name, $email, $id);
         $stmt->execute();
     }
 

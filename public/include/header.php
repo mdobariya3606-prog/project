@@ -2,19 +2,24 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
-    <link rel="stylesheet" href="../css/style.css" >
+    <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <header class="header">
-        <h2>Google Cloud</h2> 
+        <h2>Google Cloud</h2>
         <nav>
             <a href="../admin/dashboard.php" class="<?php echo ($currentPage === 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
-            <a href="../admin/delete-user.php" class="<?php echo ($currentPage === 'delete-user.php') ? 'active' : ''; ?>">Delete users</a>
-            <a href="../admin/change-user-password.php" class="<?php echo ($currentPage === 'change-user-password.php') ? 'active' : ''; ?>">Change user password</a>
+
+            <?php if ($_SESSION['admin']) { ?>
+
+                <a href="../admin/delete-user.php" class="<?php echo ($currentPage === 'delete-user.php') ? 'active' : ''; ?>">Delete users</a>
+                <a href="../admin/change-user-password.php" class="<?php echo ($currentPage === 'change-user-password.php') ? 'active' : ''; ?>">Change user password</a> <?php } ?>
             <a href="add_file.php" class="<?php echo ($currentPage === 'add_file.php') ? 'active' : ''; ?>">Add file</a>
             <a href="share_file.php" class="<?php echo ($currentPage === 'share_file.php') ? 'active' : ''; ?>">Share file</a>
             <a href="../user/profile.php" class="<?php echo ($currentPage === 'profile.php') ? 'active' : ''; ?>">Profile</a>
@@ -23,4 +28,5 @@
         </nav>
     </header>
 </body>
+
 </html>
