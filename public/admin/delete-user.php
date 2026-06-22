@@ -26,8 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach($_POST['user_ids'] as $key => $id) {
             $directory = '../../uploads/user/' . $id;
             rmdir($directory);
+            if ($_SESSION['user']['id'] == $id) {
+                session_destroy();
+            }
         }
-
         header("Location: dashboard.php");
     }
 }

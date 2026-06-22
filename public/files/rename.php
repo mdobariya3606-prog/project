@@ -1,25 +1,18 @@
 <link rel="stylesheet" href="../css/style.css">
 <?php
 require '../session.php';
+require '../../config/bootstrap.php';
 require '../middleware/auth.php';
 require '../middleware/status.php';
+require '../middleware/permission.php';
 require '../middleware/file.php';
-require '../../config/bootstrap.php';
 include '../include/header.php';
 /** @var mysqli $conn */
 
 
 $id = $_GET['id'];
 
-$stmt = $conn->prepare('select type as permission from document_user_permission where user_id = ? and document_id = ?');
-$stmt->bind_param('ii', $_SESSION['user']['id'], $id);
-$stmt->execute();
-$result = $stmt->get_result();
-$file = $result->fetch_assoc();
 
-if (!$_SESSION['admin'] && $file['permission'] != 'ALL') {
-    die('unauthorized');
-}
 
 $result = $helper->getDocumentById($id);
 $file = $result->fetch_assoc();

@@ -3,8 +3,10 @@
 <?php
 
 require '../session.php';
-require '../middleware/file.php';
 require '../../config/bootstrap.php';
+require '../middleware/status.php';
+require '../middleware/file.php';
+require '../middleware/permission.php';
 require '../include/header.php';
 /** @var mysqli $conn */
 

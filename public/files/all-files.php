@@ -37,7 +37,7 @@ $result = $stmt->get_result();
                     <h3><?php echo $file['original_name'] ?></h3>
 
                     <p>Type: <?php echo $file['extension']; ?></p>
-                    <p>Size: <?php echo round($file['file_size'] / 10000, 2); ?> MB</p>
+                    <p>Size: <?php echo ceil($file['file_size'] / 1048); ?> KB</p>
                     <p>Owner: <?php echo $file['name']; ?></p>
                     <p>Uploaded: <?php echo $file['created_at']; ?></p>
 

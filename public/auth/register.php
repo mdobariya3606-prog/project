@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = mysqli_fetch_assoc($helper->getUserByEmail($email));
             $helper->logAction($user['id'], 'REGISTER');
 
+            $folder = '../../uploads/user/' . $user['id'];
+            mkdir($folder, 0777, true);
+
             header("Location: login.php");
         }
     }
@@ -77,5 +80,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 </body>
-
-</html>

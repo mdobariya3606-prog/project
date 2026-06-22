@@ -39,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 require '../middleware/status.php';
 
                 $email = $row['email'];
-                setcookie('remember_me', $email, time() + 86400, '/');
 
                 $_SESSION['user'] = $row;
                 $_SESSION['admin'] = ($_SESSION['user']['role'] == 'ADMIN') ? true : false;
+                setcookie('remember_me', $email, time() + 86400, '/');
 
                 $helper->logAction($_SESSION['user']['id'], 'LOGIN');
 
