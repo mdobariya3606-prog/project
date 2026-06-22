@@ -1,6 +1,7 @@
 <?php
 require '../session.php';
 require '../middleware/auth.php';
+require '../middleware/status.php';
 require '../../config/bootstrap.php';
 require '../functions/Helper.php';
 include '../include/header.php';
@@ -36,14 +37,15 @@ $result = $stmt->get_result();
                     <h3><?php echo $file['original_name'] ?></h3>
 
                     <p>Type: <?php echo $file['extension']; ?></p>
-                    <p>Size: <?php echo round($file['file_size'] / 1000, 2); ?> MB</p>
+                    <p>Size: <?php echo round($file['file_size'] / 10000, 2); ?> MB</p>
                     <p>Owner: <?php echo $file['name']; ?></p>
                     <p>Uploaded: <?php echo $file['created_at']; ?></p>
 
                     <div class="actions">
                         <a href="rename.php?id=<?php echo $file['document_id']; ?>" class="btn">Rename</a>
-                        <a href="#" class="btn">Download</a>
+                        <a href="download.php?id=<?php echo $file['document_id']; ?>" class="btn">Download</a>
                         <a href="delete-file.php?id=<?php echo $file['document_id']; ?>" onclick="return confirm('delete this document?')" class="btn delete">Delete</a>
+                        <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
                     </div>
                 </div>
         <?php  }

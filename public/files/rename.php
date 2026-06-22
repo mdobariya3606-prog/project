@@ -1,14 +1,26 @@
 <link rel="stylesheet" href="../css/style.css">
-<?php 
+<?php
 require '../session.php';
+require '../middleware/auth.php';
+require '../middleware/status.php';
+require '../middleware/file.php';
 require '../../config/bootstrap.php';
-require '../functions/Helper.php';
 include '../include/header.php';
 /** @var mysqli $conn */
 
-$helper = new Helper($conn);
 
 $id = $_GET['id'];
+
+$stmt = $conn->prepare('select type as permission from document_user_permission where user_id = ? and document_id = ?');
+$stmt->bind_param('ii', $_SESSION['user']['id'], $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$file = $result->fetch_assoc();
+
+if (!$_SESSION['admin'] && $file['permission'] != 'ALL') {
+    die('unauthorized');
+}
+
 $result = $helper->getDocumentById($id);
 $file = $result->fetch_assoc();
 
@@ -16,10 +28,10 @@ $newName = $newNameErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newName = htmlspecialchars(trim($_POST['file_name']));
-    
+
     if (empty($newName)) {
         $newNameErr = "required";
-    } else if (!preg_match('/^[a-zA-Z0-9 ]*$/', $newName)) {
+    } else if (!preg_match('/^[a-zA-Z0-9() ]*$/', $newName)) {
         $newNameErr = "only spaces, digits and characters are allowed";
     }
 
@@ -36,13 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rename file</title>
 </head>
+
 <body>
-    <div class="auth-form">
+    <div class="rename-form">
         <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $id; ?>" method="post">
             <span class="error"><?php echo $newNameErr; ?></span>
             <input type="text" name="file_name" id="file_name" value="<?php echo $file['original_name']; ?>">
@@ -50,4 +64,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </body>
+
 </html>

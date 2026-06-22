@@ -137,9 +137,9 @@ class Helper
         return $stmt->get_result();
     }
 
-    function addPermission($user_id, $document_id) {
-        $stmt = $this->conn->prepare('insert into document_user_permission (user_id, document_id) values (?, ?)');
-        $stmt->bind_param('ii', $user_id, $document_id);
+    function addPermission($user_id, $document_id, $type) {
+        $stmt = $this->conn->prepare('insert into document_user_permission (user_id, document_id, type) values (?, ?, ?)');
+        $stmt->bind_param('iis', $user_id, $document_id, $type);
         $stmt->execute();
     }
 

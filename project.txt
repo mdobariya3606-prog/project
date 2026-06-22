@@ -6,14 +6,14 @@ Create a Private Cloud-Based Document Sharing Platform
 • Private document storage
   ✓ Users can upload files like PDF, DOCX, XLSX, PPT, etc.
   ✓ Files are stored securely in cloud storage (for now local server).
-  → Nothing is publicly accessible.
+  ✓ Nothing is publicly accessible.
 
 • Strict access control
-  → No public share links.
-  → A file is visible only to the owner by default.
-  → The owner must manually invite specific users.
-  → Only those selected users can view/download the file.
-  → Any other user must be completely denied access.
+  ✓ No public share links.
+  ✓ A file is visible only to the owner by default.
+  ✓ The owner must manually invite specific users.
+  ✓ Only those selected users can view/download the file.
+  ✓ Any other user must be completely denied access.
 
 • Simple authentication system
   ✓ Only email + password login (no social login, no OAuth).
@@ -24,8 +24,8 @@ Create a Private Cloud-Based Document Sharing Platform
 • Admin panel
   ✓ Admin can see all users.
   → Admin can see total storage usage.
-  → Admin can instantly grant or revoke access.
-  → Admin credentials must be provided.
+  ✓ Admin can instantly grant or revoke access.
+  ✓ Admin credentials must be provided.
 
 • Responsive UI
   → Must work properly on mobile and desktop.
@@ -44,9 +44,9 @@ Modules:
 ✓ Email verification (recommended for security)
 
 Access Restrictions:
-→ Cannot view any documents
-→ Cannot see any users
-→ Cannot access any file URL directly
+✓ Cannot view any documents
+✓ Cannot see any users
+✓ Cannot access any file URL directly
 
 
 2. REGISTERED USER (Document Owner / Shared User)
@@ -60,29 +60,29 @@ A) Account Management
 
 B) Document Management (Owner Side)
 ✓ Upload document (PDF, DOCX, XLSX, PPT, etc.)
-→ Store in object storage (local)
+✓ Store in object storage (local)
 → Create folders (optional but useful)
 ✓ Rename file
-→ Delete file
-→ Download file
-→ View file details (size, upload date, shared users)
+✓ Delete file
+✓ Download file
+✓ View file details (size, upload date, shared users)
 
 C) Invite-Only Sharing System
-→ Share file with specific registered users only
-→ Select user(s) from existing users
+✓ Share file with specific registered users only
+✓ Select user(s) from existing users
 → Revoke access anytime
 → View list of users who have access
 
 Important logic:
-→ By default, file visibility = Private
-→ Only owner + explicitly invited users can access
-→ No public links
-→ Every file access must validate permissions from DB
+✓ By default, file visibility = Private
+✓ Only owner + explicitly invited users can access
+✓ No public links
+✓ Every file access must validate permissions from DB
 
 D) Shared With Me Section
-→ List of files shared by others
-→ Download allowed files
-→ No ability to reshare unless permission is granted
+✓ List of files shared by others
+✓ Download allowed files
+✓ No ability to reshare unless permission is granted
 
 
 3. ADMIN ROLE
@@ -102,7 +102,7 @@ B) Storage Monitoring
 
 C) Access Control Override
 → Grant or revoke document access manually
-→ Force delete any document
+✓ Force delete any document
 → Disable sharing for specific users
 
 D) System Monitoring
@@ -120,10 +120,10 @@ Basic dashboard:
 
 4. SYSTEM MODULES (Common Layer)
 
-→ Authentication module
-→ Role & permission system
-→ File upload service
-→ Object storage integration
+✓ Authentication module
+✓ Role & permission system
+✓ File upload service
+✓ Object storage integration
 ✓ Access validation middleware
 → Email service (for invite notification + reset password)
 → API layer (if frontend is separated)

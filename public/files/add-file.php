@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $original_name = pathinfo($fileName, PATHINFO_FILENAME);
                 $document_id = $helper->addDocument($original_name, $newName, $fileSize, $extenstion);
                 $message = 'file uploaded successfully';
-                $helper->addPermission($_SESSION['user']['id'], $document_id);
+                $helper->addPermission($_SESSION['user']['id'], $document_id, "ALL");
             } else {
                 $message = 'file upload failed';
             }

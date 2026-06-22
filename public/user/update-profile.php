@@ -1,8 +1,10 @@
 <?php
-include '../session.php';
-/** @var mysqli $conn */
-include '../../config/bootstrap.php';
+require '../session.php';
+require '../middleware/auth.php';
+require '../../config/bootstrap.php';
 include '../functions/Helper.php';
+include '../include/header.php';
+/** @var mysqli $conn */
 
 $helper = new Helper($conn);
 $name = $nameErr = $email = $emailErr = "";
