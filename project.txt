@@ -23,7 +23,7 @@ Create a Private Cloud-Based Document Sharing Platform
 
 • Admin panel
   ✓ Admin can see all users.
-  → Admin can see total storage usage.
+  ✓ Admin can see total storage usage.
   ✓ Admin can instantly grant or revoke access.
   ✓ Admin credentials must be provided.
 
@@ -70,8 +70,8 @@ B) Document Management (Owner Side)
 C) Invite-Only Sharing System
 ✓ Share file with specific registered users only
 ✓ Select user(s) from existing users
-→ Revoke access anytime
-→ View list of users who have access
+✓ Revoke access anytime
+✓ View list of users who have access
 
 Important logic:
 ✓ By default, file visibility = Private
@@ -96,12 +96,12 @@ A) User Management
 ✓ Reset user passwords (optional)
 
 B) Storage Monitoring
-→ View total system storage usage
-→ View per-user storage usage
+✓ View total system storage usage
+✓ View per-user storage usage
 → Identify heavy storage users
 
 C) Access Control Override
-→ Grant or revoke document access manually
+✓ Grant or revoke document access manually
 ✓ Force delete any document
 → Disable sharing for specific users
 
@@ -113,9 +113,9 @@ Audit logs:
 • Who shared with whom
 
 Basic dashboard:
-• Total users
-• Total documents
-• Total storage used
+✓ Total users
+✓ Total documents
+✓ Total storage used
 
 
 4. SYSTEM MODULES (Common Layer)

@@ -12,6 +12,8 @@ require '../include/header.php';
 $helper = new Helper($conn);
 
 $users = $helper->getAllUsers();
+$storages = $helper->getStoragePerUser();
+$total = $helper->getTotalStorage();
 ?>
 
 <!DOCTYPE html>
@@ -29,16 +31,16 @@ $users = $helper->getAllUsers();
             <h2>Users</h2>
             <table class="user-table">
                 <tr>
-                    <th class="id">Id</th>
-                    <th class="name">Name</th>
-                    <th class="email">Email</th>
-                    <th class="status">Status</th>
-                    <th class="functions">Functions</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Functions</th>
                 </tr>
-                <tr>
-                    <?php if (mysqli_num_rows($users) > 0) {
-                        while ($user = mysqli_fetch_assoc($users)) {
-                            if ($user['role'] !== 'ADMIN') { ?>
+                <?php if (mysqli_num_rows($users) > 0) {
+                    while ($user = mysqli_fetch_assoc($users)) {
+                        if ($user['role'] !== 'ADMIN') { ?>
+                            <tr>
                                 <td><?php echo $user['id']; ?></td>
                                 <td class="name"><?php echo $user['name']; ?></td>
                                 <td><?php echo $user['email']; ?></td>
@@ -46,10 +48,33 @@ $users = $helper->getAllUsers();
                                 <td>
                                     <a href="../admin/change-status.php?id=<?php echo $user['id']; ?>">Change status</a>
                                 </td>
+                            </tr>
+                <?php }
+                    }
+                } ?>
+            </table>
+
+
+            <h2>Storage Usage per user</h2>
+            <table class="user-table">
+                <tr>
+                    <th>User id</th>
+                    <th>Storage - KB</th>
+                    <th>Storage - MB</th>
                 </tr>
-    <?php }
-                        }
-                    } ?>
+                <?php while ($storage = $storages->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo $storage['owner_id']; ?></td>
+                        <td><?php echo round($storage['total'] / 1024, 2); ?></td>
+                        <td><?php echo round($storage['total'] / 1024 / 1024, 2); ?></td>
+                    </tr>
+                <?php } ?>
+
+                <tr>
+                    <td>Total Usage</td>
+                    <td><?php echo round($total / 1024, 2) ?></td>
+                    <td><?php echo round($total / 1024 / 1024, 2) ?></td>
+                </tr>
             </table>
         </div>
     </div>

@@ -87,7 +87,8 @@ class Helper
         return $document['document_id'];
     }
 
-    function deleteDocument($id) {
+    function deleteDocument($id)
+    {
         $stmt = $this->conn->prepare('delete from document_info where document_id = ?');
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -137,7 +138,37 @@ class Helper
         return $stmt->get_result();
     }
 
-    function addPermission($user_id, $document_id, $type) {
+    function getTotalStorage()
+    {
+        $sql = mysqli_query($this->conn, 'select sum(file_size) as total from document_info');
+        $file = mysqli_fetch_assoc($sql);
+        return $file['total'];
+    }
+
+    function getStoragePerUser()
+    {
+        $result = mysqli_query($this->conn, '
+        SELECT u.id AS owner_id, COALESCE(d.file_size, 0) AS total
+        FROM user_info u
+        left JOIN document_info d 
+        ON d.owner_id = u.id
+        GROUP BY u.id');
+        
+        return $result;
+    }
+
+    function isOwner($id)
+    {
+        $stmt = $this->conn->prepare('select document_id from document_info where document_id = ? and owner_id = ?');
+        $stmt->bind_param('ii', $id, $_SESSION['user']['id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows != 0;
+    }
+
+    function addPermission($user_id, $document_id, $type)
+    {
         $stmt = $this->conn->prepare('insert into document_user_permission (user_id, document_id, type) values (?, ?, ?)');
         $stmt->bind_param('iis', $user_id, $document_id, $type);
         $stmt->execute();
