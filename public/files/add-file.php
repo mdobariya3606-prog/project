@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = $file['name'];
         $tmpName = $file['tmp_name'];
         $fileSize = $file['size'];
-        $allowed = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'];
+        $allowed = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'php'];
         $extenstion = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         // check user storage limit

@@ -15,6 +15,12 @@ $result = $stmt->get_result();
 $total = $result->fetch_assoc();
 $totalDocuments = $total['total'];
 
+$sql = 'select created_at from document_info where owner_id = ? order by created_at desc limit 1';
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$lastUpload = $stmt->get_result()->fetch_assoc()['created_at'];
+
 $stmt = $conn->prepare('
 SELECT count(*) AS total
 FROM document_user_permission p
@@ -31,6 +37,25 @@ $total = $result->fetch_assoc();
 $sharedFiles = $total['total'];
 
 $storage = $helper->getStorageById($user_id);
+
+$stmt = $conn->prepare('
+    select d.*, u.name, u.can_share 
+    from document_info d 
+    join user_info u 
+    on d.owner_id = u.id 
+    where d.owner_id = ? order by created_at limit 5');
+
+$stmt->bind_param('i', $_SESSION['user']['id']);
+$stmt->execute();
+
+$result = $stmt->get_result();
+
+$sql = 'select extension, count(*) as total from document_info where owner_id = ? group by extension';
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+
+$extResult = $stmt->get_result();
 
 ?>
 <!DOCTYPE html>
@@ -52,11 +77,11 @@ $storage = $helper->getStorageById($user_id);
                     <th>Details</th>
                 </tr>
                 <tr>
-                    <td>Total documents</td>
+                    <td>Owned documents</td>
                     <td><?php echo $totalDocuments; ?></td>
                 </tr>
                 <tr>
-                    <td>Shared files</td>
+                    <td>Received Files</td>
                     <td><?php echo $sharedFiles; ?></td>
                 </tr>
                 <tr>
@@ -64,18 +89,42 @@ $storage = $helper->getStorageById($user_id);
                     <td><?php echo round($storage / (1024 * 1024), 2); ?>MB/400MB</td>
                 </tr>
                 <tr>
-                    <td>Received Files</td>
-                    <td><?php echo $sharedFiles; ?></td>
-                </tr>
-                <tr>
-                    <td>Active Shares</td>
-                    <td><?php echo $totalDocuments; ?></td>
-                </tr>
-                <tr>
                     <td>Last Upload</td>
-                    <td><?php echo $totalDocuments; ?></td>
+                    <td><?php echo $lastUpload; ?></td>
                 </tr>
             </table>
+
+            <h2>File types</h2>
+            <table class="profile-table">
+                <tr>
+                    <th>File Type</th>
+                    <th>Count</th>
+                </tr>
+                <?php while ($extRow = $extResult->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo $extRow['extension']; ?></td>
+                        <td><?php echo $extRow['total']; ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+
+            <h2>Last 5 uploaded files</h2>
+
+            <div class="file-container">
+                <?php if ($result->num_rows > 0) {
+                    while ($file = $result->fetch_assoc()) { ?>
+                        <div class="file-box">
+                            <h3><?php echo $file['original_name'] ?></h3>
+
+                            <p>Type: <?php echo $file['extension']; ?></p>
+                            <p>Size: <?php echo round($file['file_size'] / (1024 * 1024), 2); ?> MB</p>
+                            <p>Uploaded: <?php echo date('d-m-Y', strtotime($file['created_at'])); ?></p>
+                        </div>
+                <?php  }
+                } ?>
+            </div>
+
+
         </div>
     </div>
 </body>

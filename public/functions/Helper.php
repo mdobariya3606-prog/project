@@ -108,7 +108,7 @@ class Helper
         $stmt = $this->conn->prepare('delete from document_info where document_id = ?');
         $stmt->bind_param('i', $id);
         $stmt->execute();
-        $this->logDocument($_SESSION['user']['id'], $id, 'DELETE_FILE');
+        // $this->logDocument($_SESSION['user']['id'], $id, 'DELETE_FILE');
     }
 
     function updateUser($id, $name, $email)
@@ -165,7 +165,7 @@ class Helper
     function getStoragePerUser()
     {
         $result = mysqli_query($this->conn, '
-        SELECT u.id AS owner_id,
+        SELECT u.id AS user_id,
         COALESCE(SUM(d.file_size), 0) AS total
         FROM user_info u
         LEFT JOIN document_info d

@@ -9,22 +9,32 @@ include '../include/header.php';
 /** @var mysqli $conn */
 $helper = new Helper($conn);
 
+if (!isset($_GET['page']) || empty($_GET['page'])) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
+
+$offset = ($page - 1) * 9;
+
 if ($_SESSION['admin']) {
     $stmt = $conn->prepare('
     select d.*, u.name, u.can_share 
     from document_info d 
     join user_info u 
-    on d.owner_id = u.id 
-    order by u.id');
+    on d.owner_id = u.id    
+    order by u.id limit 9 offset ?');
+
+    $stmt->bind_param('i', $offset);
 } else {
     $stmt = $conn->prepare('
     select d.*, u.name, u.can_share 
     from document_info d 
     join user_info u 
     on d.owner_id = u.id 
-    where d.owner_id = ?');
-    
-    $stmt->bind_param('i', $_SESSION['user']['id']);
+    where d.owner_id = ? limit 9 offset ?');
+
+    $stmt->bind_param('ii', $_SESSION['user']['id'], $offset);
 }
 $stmt->execute();
 
@@ -66,6 +76,14 @@ $result = $stmt->get_result();
                 </div>
         <?php  }
         } ?>
+
+        <div class="navigation">
+            <a href="?page=<?= $page - 1 ?>">← Previous</a>
+
+            <span>Page <?= $page  ?></span>
+
+            <a href="?page=<?= $page + 1 ?>">Next →</a>
+        </div>
     </div>
 </body>
 

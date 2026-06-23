@@ -113,6 +113,7 @@ td {
   margin: 10px;
   margin-bottom: 30px;
   width: 100%;
+  text-align: left;
 }
 
 .profile-table {
@@ -393,6 +394,24 @@ button {
   margin-top: 15px;
 }
 
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.navigation a {
+    text-decoration: none;
+    padding: 8px 12px;
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.navigation span {
+    padding: 8px 12px;
+}
 
 /* ================================================
    UTILITIES
@@ -424,6 +443,7 @@ button {
 
   .profile-table {
     width: 100%;
+    text-align: left;
   }
 
   .permission-type {

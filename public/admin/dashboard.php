@@ -44,7 +44,9 @@ function checkStorage($usage)
                     <th>Id</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Can Share</th>
                     <th>Status</th>
+                    <th>Registered at</th>
                 </tr>
                 <?php if (mysqli_num_rows($users) > 0) {
                     while ($user = mysqli_fetch_assoc($users)) {
@@ -54,6 +56,8 @@ function checkStorage($usage)
                                 <td class="name"><?php echo $user['name']; ?></td>
                                 <td><?php echo $user['email']; ?></td>
                                 <td><?php echo $user['status']; ?></td>
+                                <td><?php echo $user['can_share']; ?></td>
+                                <td><?php echo date('Y-m-d', strtotime($user['created_at'])); ?></td>
                             </tr>
                 <?php }
                     }
@@ -69,14 +73,16 @@ function checkStorage($usage)
                     <th>Storage - MB</th>
                     <th>Status</th>
                 </tr>
-                <?php while ($storage = $storages->fetch_assoc()) { ?>
-                    <tr>
-                        <td><?php echo $storage['owner_id']; ?></td>
-                        <td><?php echo round($storage['total'] / 1024, 2); ?></td>
-                        <td><?php echo round($storage['total'] / (1024 * 1024), 2); ?></td>
-                        <td><b><?php checkStorage($storage['total'] / (1024 * 1024), 2); ?></b></td>
-                    </tr>
-                <?php } ?>
+                <?php while ($storage = $storages->fetch_assoc()) {
+                    if ($storage['user_id'] != 1) { ?>
+                        <tr>
+                            <td><?php echo $storage['user_id']; ?></td>
+                            <td><?php echo round($storage['total'] / 1024, 2); ?></td>
+                            <td><?php echo round($storage['total'] / (1024 * 1024), 2); ?></td>
+                            <td><b><?php checkStorage($storage['total'] / (1024 * 1024)); ?></b></td>
+                        </tr>
+                <?php }
+                } ?>
 
                 <tr>
                     <td><b>Total Usage</b></td>
