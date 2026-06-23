@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         } ?>
                 </table>
-                <button type="submit" class="btn-share" onclick="return confirm('Sure to delete?')">Share</button>
+                <button type="submit" class="btn-share">Share</button>
             </form>
         </div>
     </div>

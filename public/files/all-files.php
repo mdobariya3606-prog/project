@@ -46,6 +46,7 @@ $result = $stmt->get_result();
                         <a href="download.php?id=<?php echo $file['document_id']; ?>" class="btn">Download</a>
                         <a href="delete-file.php?id=<?php echo $file['document_id']; ?>" onclick="return confirm('delete this document?')" class="btn delete">Delete</a>
                         <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
+                        <a href="permissions.php?id=<?php echo $file['document_id']; ?>" class="btn">Permissions</a>
                     </div>
                 </div>
         <?php  }
