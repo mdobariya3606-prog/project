@@ -14,18 +14,18 @@
     <header class="header">
         <h2>Google Cloud</h2>
         <nav>
-            <a href="../admin/dashboard.php" class="<?php echo ($currentPage === 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
 
             <?php if ($_SESSION['admin']) { ?>
-                <a href="../admin/delete-user.php" class="<?php echo ($currentPage === 'delete-user.php') ? 'active' : ''; ?>">Delete users</a>
+                <a href="../admin/dashboard.php" class="<?php echo ($currentPage === 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
+                <a href="../admin/manage-users.php" class="<?php echo ($currentPage === 'manage-users.php') ? 'active' : ''; ?>">Manage users</a>
                 <a href="../admin/change-user-password.php" class="<?php echo ($currentPage === 'change-user-password.php') ? 'active' : ''; ?>">Change user password</a> <?php } ?>
             <a href="../files/add-file.php" class="<?php echo ($currentPage === 'add_file.php') ? 'active' : ''; ?>">Add file</a>
-            <a href="../files/all-files.php" class="<?php echo ($currentPage === 'all-files.php') ? 'active' : ''; ?>">Files</a>
+            <a href="../files/all-files.php" class="<?php echo ($currentPage === 'all-files.php') ? 'active' : ''; ?>">Manage Files</a>
             <?php if (!$_SESSION['admin']) { ?>
                 <a href="../files/shared-files.php" class="<?php echo ($currentPage === 'shared-file.php') ? 'active' : ''; ?>">Shared file</a>
+                <a href="../user/change-password.php" class="<?php echo ($currentPage === 'change-password.php') ? 'active' : ''; ?>">Reset password</a>
             <?php } ?>
             <a href="../user/profile.php" class="<?php echo ($currentPage === 'profile.php') ? 'active' : ''; ?>">Profile</a>
-            <a href="../user/change-password.php" class="<?php echo ($currentPage === 'change-password.php') ? 'active' : ''; ?>">Reset password</a>
             <a href="../auth/logout.php" onclick="return confirm('Logout???')">Logout</a>
         </nav>
     </header>

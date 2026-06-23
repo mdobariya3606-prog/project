@@ -35,7 +35,6 @@ $total = $helper->getTotalStorage();
                     <th>Name</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Functions</th>
                 </tr>
                 <?php if (mysqli_num_rows($users) > 0) {
                     while ($user = mysqli_fetch_assoc($users)) {
@@ -45,9 +44,6 @@ $total = $helper->getTotalStorage();
                                 <td class="name"><?php echo $user['name']; ?></td>
                                 <td><?php echo $user['email']; ?></td>
                                 <td><?php echo $user['status']; ?></td>
-                                <td>
-                                    <a href="../admin/change-status.php?id=<?php echo $user['id']; ?>">Change status</a>
-                                </td>
                             </tr>
                 <?php }
                     }
@@ -71,11 +67,12 @@ $total = $helper->getTotalStorage();
                 <?php } ?>
 
                 <tr>
-                    <td>Total Usage</td>
-                    <td><?php echo round($total / 1024, 2) ?></td>
-                    <td><?php echo round($total / 1024 / 1024, 2) ?></td>
+                    <td><b>Total Usage</b></td>
+                    <td><b><?php echo round($total / 1024, 2) ?></b></td>
+                    <td><b><?php echo round($total / 1024 / 1024, 2) ?></b></td>
                 </tr>
             </table>
+
         </div>
     </div>
 </body>

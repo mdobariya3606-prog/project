@@ -1,6 +1,5 @@
 <?php
 require '../session.php';
-require '../helper.php';
 require '../middleware/auth.php';
 /** @var mysqli $conn */
 

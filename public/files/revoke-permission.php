@@ -28,7 +28,7 @@ if ($result->num_rows == 0) {
 }
 
 $file = $result->fetch_assoc();
-if ($file['owner_id'] != $user_id) {
+if (!$_SESSION['admin'] && $file['owner_id'] != $user_id) {
     die('unauthorized');
 }
 

@@ -1,17 +1,18 @@
 <?php
 require '../session.php';
+require '../functions/Helper.php';
 require '../middleware/auth.php';
 require '../middleware/status.php';
 require '../../config/bootstrap.php';
-require '../functions/Helper.php';
 include '../include/header.php';
+
 /** @var mysqli $conn */
 $helper = new Helper($conn);
 
 if ($_SESSION['admin']) {
-    $stmt = $conn->prepare('select d.*, u.name from document_info d join user_info u on d.owner_id = u.id order by u.id');
+    $stmt = $conn->prepare('select d.*, u.name, u.can_share from document_info d join user_info u on d.owner_id = u.id order by u.id');
 } else {
-    $stmt = $conn->prepare('select d.*, u.name from document_info d join user_info u on d.owner_id = u.id where d.owner_id = ?');
+    $stmt = $conn->prepare('select d.*, u.name, u.can_share from document_info d join user_info u on d.owner_id = u.id where d.owner_id = ?');
     $stmt->bind_param('i', $_SESSION['user']['id']);
 }
 $stmt->execute();
@@ -45,8 +46,11 @@ $result = $stmt->get_result();
                         <a href="rename.php?id=<?php echo $file['document_id']; ?>" class="btn">Rename</a>
                         <a href="download.php?id=<?php echo $file['document_id']; ?>" class="btn">Download</a>
                         <a href="delete-file.php?id=<?php echo $file['document_id']; ?>" onclick="return confirm('delete this document?')" class="btn delete">Delete</a>
-                        <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
-                        <a href="permissions.php?id=<?php echo $file['document_id']; ?>" class="btn">Permissions</a>
+
+                        <?php if ($_SESSION['admin'] || $file['can_share'] == 'YES') { ?>
+                            <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
+                            <a href="permissions.php?id=<?php echo $file['document_id']; ?>" class="btn">Permissions</a>
+                        <?php } ?>
                     </div>
                 </div>
         <?php  }

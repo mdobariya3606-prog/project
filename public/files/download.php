@@ -1,10 +1,14 @@
 <?php
 require '../session.php';
+require '../functions/Helper.php';
+
+/** @var mysqli $conn */
+$helper = new Helper($conn);
+
 require '../middleware/auth.php';
 require '../middleware/file.php';
 require '../middleware/status.php';
 require '../../config/bootstrap.php';
-/** @var mysqli $conn */
 
 $id = $_GET['id'];
 $result = $helper->getDocumentById($id);

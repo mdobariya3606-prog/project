@@ -4,13 +4,17 @@
 
 require '../session.php';
 require '../../config/bootstrap.php';
+require '../functions/Helper.php';
+
+/** @var mysqli $conn */
+$helper = new Helper($conn);
+
+include '../include/header.php';
 require '../middleware/status.php';
+require '../middleware/share-access.php';
 require '../middleware/file.php';
 require '../middleware/permission.php';
-require '../include/header.php';
-/** @var mysqli $conn */
 
-// $users = $helper->getAllUsers();
 $document_id = $_GET['id'];
 
 $sql = "

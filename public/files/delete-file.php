@@ -1,12 +1,14 @@
 <link rel="stylesheet" href="../css/style.css">
 <?php
 require '../session.php';
+require '../../config/bootstrap.php';
+require '../functions/Helper.php';
+/** @var mysqli $conn */
+$helper = new Helper($conn);
 require '../middleware/auth.php';
 require '../middleware/status.php';
 require '../middleware/file.php';
-require '../../config/bootstrap.php';
 include '../include/header.php';
-/** @var mysqli $conn */
 
 $id = $_GET['id'];
 $user_id = $_SESSION['user']['id'];
