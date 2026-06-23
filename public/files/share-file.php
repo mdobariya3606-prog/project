@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($ids as $id) {
             $helper->addPermission($id, $document_id, $type);
+            $helper->logShare($_SESSION['user']['id'], $id, $document_id);
         }
 
         header("Location: all-files.php");

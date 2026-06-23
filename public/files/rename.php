@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($newName)) {
         $newNameErr = "required";
-    } else if (!preg_match('/^[a-zA-Z0-9() ]*$/', $newName)) {
-        $newNameErr = "only spaces, digits and characters are allowed";
+    } else if (!preg_match('/^[a-zA-Z0-9()-. ]*$/', $newName)) {
+        $newNameErr = "Invalid file name";
     }
 
     if (empty($newNameErr)) {

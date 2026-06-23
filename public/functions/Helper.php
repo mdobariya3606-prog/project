@@ -208,6 +208,12 @@ class Helper
         $stmt->execute();
     }
 
+    function logShare($sender_id, $receiver_id, $document_id) {
+        $stmt = $this->conn->prepare('insert into share_log (sender_id , receiver_id, document_id) values (?, ?, ?)');
+        $stmt->bind_param('iii', $sender_id, $receiver_id, $document_id);
+        $stmt->execute();
+    }
+
     function sendPasswordEmail($user, $mail)
     {
         $otp = random_int(100000, 999999);
