@@ -8,7 +8,6 @@
   box-sizing: border-box;
 }
 
-
 /* ================================================
    HEADER
    ================================================ */
@@ -46,7 +45,6 @@
   text-decoration: underline;
 }
 
-
 /* ================================================
    CONTAINER
    ================================================ */
@@ -59,7 +57,6 @@
   padding: 10px;
   margin: 10px;
 }
-
 
 /* ================================================
    USER TABLE
@@ -104,7 +101,6 @@ td {
   background-color: #333;
 }
 
-
 /* ================================================
    PROFILE TABLE
    ================================================ */
@@ -120,7 +116,6 @@ td {
   width: 100%;
   max-width: 600px;
 }
-
 
 /* ================================================
    AUTH FORMS (Login / Register)
@@ -141,6 +136,7 @@ td {
   padding: 20px;
 }
 
+.btn-change,
 .forget-pass input,
 button,
 .auth-form input {
@@ -157,6 +153,7 @@ button,
   border-bottom: 1px solid black;
 }
 
+.btn-change,
 .forget-pass button,
 .auth-form button {
   border-radius: 10px;
@@ -165,11 +162,11 @@ button,
   width: 100%;
 }
 
-
 /* ================================================
    CHANGE PASSWORD & RENAME FORM
    ================================================ */
-.change-pass, .rename-form {
+.change-pass,
+.rename-form {
   height: auto;
   min-height: 70%;
   display: flex;
@@ -178,7 +175,8 @@ button,
   padding: 20px;
 }
 
-.rename-form form, .change-pass form {
+.rename-form form,
+.change-pass form {
   width: 100%;
   max-width: 400px;
   padding: 20px;
@@ -218,7 +216,6 @@ button {
   width: 100%;
   border-radius: 15px;
 }
-
 
 /* ================================================
    BUTTONS
@@ -274,7 +271,6 @@ button {
   background: #fff0f0;
 }
 
-
 /* ================================================
    DASHBOARD & USER MANAGEMENT
    ================================================ */
@@ -294,7 +290,6 @@ button {
   border-radius: 15px;
   margin-bottom: 10px;
 }
-
 
 /* ================================================
    FILE UPLOAD
@@ -359,7 +354,6 @@ button {
   font-weight: bold;
 }
 
-
 /* ================================================
    FILE GRID
    ================================================ */
@@ -395,22 +389,22 @@ button {
 }
 
 .navigation {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px 0;
+  /* display: flex; */
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
 }
 
 .navigation a {
-    text-decoration: none;
-    padding: 8px 12px;
-    background: #333;
-    color: #fff;
-    border-radius: 5px;
+  text-decoration: none;
+  padding: 8px 12px;
+  background: #333;
+  color: #fff;
+  border-radius: 5px;
 }
 
 .navigation span {
-    padding: 8px 12px;
+  padding: 8px 12px;
 }
 
 /* ================================================
@@ -427,7 +421,6 @@ button {
   text-decoration: underline;
   color: #333;
 }
-
 
 /* ================================================
    RESPONSIVE — TABLET (max 768px)
@@ -457,7 +450,6 @@ button {
     margin: 6px 0;
   }
 }
-
 
 /* ================================================
    RESPONSIVE — MOBILE (max 480px)

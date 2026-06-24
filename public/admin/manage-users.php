@@ -19,9 +19,9 @@ if (isset($_POST['btn-delete'])) {
         $error = "select any user.";
     } else {
         $ids = implode(',', $_POST['user_ids']);
-    
+
         $sql = mysqli_query($conn, "delete from user_info where id in ($ids)");
-    
+
         foreach ($_POST['user_ids'] as $key => $id) {
             $directory = '../../uploads/user/' . $id;
             rmdir($directory);
@@ -29,7 +29,7 @@ if (isset($_POST['btn-delete'])) {
                 session_destroy();
             }
         }
-        header("Location: dashboard.php");
+        $users = $helper->getAllUsers();
     }
 }
 
@@ -92,13 +92,13 @@ if (isset($_POST['btn-delete'])) {
                                 <td><?php echo $user['id']; ?></td>
                                 <td class="name"><?php echo $user['name']; ?></td>
                                 <td><?php echo $user['email']; ?></td>
-                                <td><?php echo $user['status']; ?></td>
-                                <td><?php echo $user['can_share']; ?></td>
+                                <td id="status-<?php echo $user['id']; ?>"><?php echo $user['status']; ?></td>
+                                <td id="share-access-<?php echo $user['id']; ?>"><?php echo $user['can_share']; ?></td>
                                 <td>
-                                    <a href="../admin/change-status.php?id=<?php echo $user['id']; ?>">Change status</a>
+                                    <button class="btn-change" onclick="changeStatus(<?php echo $user['id']; ?>)">Change Status</button>
                                 </td>
                                 <td>
-                                    <a href="../admin/change-share-access.php?id=<?php echo $user['id']; ?>">Change Share Access</a>
+                                    <button class="btn-change" onclick="changeShareStatus(<?php echo $user['id']; ?>)">Change Share Access</button>
                                 </td>
                             </tr>
                 <?php }
@@ -109,5 +109,19 @@ if (isset($_POST['btn-delete'])) {
         </div>
     </div>
 </body>
+
+<script>
+    function changeStatus(id) {
+        fetch('../admin/change-status.php?id=' + id)
+            .then(response => response.text())
+            .then(data => document.getElementById('status-'+id).innerText = data);
+    }
+
+    function changeShareStatus(id) {
+        fetch('../admin/change-share-access.php?id=' + id)
+            .then(response => response.text())
+            .then(data => document.getElementById('share-access-'+id).innerText = data);
+    }
+</script>
 
 </html>

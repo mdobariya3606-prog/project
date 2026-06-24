@@ -46,7 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $helper->logAction($_SESSION['user']['id'], 'LOGIN');
 
-                header("Location: ../user/profile.php");
+                if ($_SESSION['admin']) {
+                    header('Location: ../admin/dashboard.php');
+                } else {
+                    header("Location: ../user/dashboard.php");
+                }
+
             } else {
                 $emailErr = "wrong email or password";
             }

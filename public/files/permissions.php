@@ -59,13 +59,13 @@ $users = $stmt->get_result();
                 <?php if (mysqli_num_rows($users) > 0) {
                     while ($user = mysqli_fetch_assoc($users)) {
                 ?>
-                        <tr>
+                        <tr id="user-row-<?php echo $user['pid']; ?>">
                             <td><?php echo $user['id']; ?></td>
                             <td class="name"><?php echo $user['name']; ?></td>
                             <td><?php echo $user['email']; ?></td>
                             <td><?php echo $user['permission']; ?></td>
                             <td>
-                                <a href="../files/revoke-permission.php?id=<?php echo $user['pid']; ?>">Revoke</a>
+                                <button class="btn-change" onclick="revokeAccess(<?php echo $user['pid']; ?>)">Revoke</button>
                             </td>
                         </tr>
                 <?php }
@@ -74,5 +74,18 @@ $users = $stmt->get_result();
         </div>
     </div>
 </body>
+<script>
+    function revokeAccess(id) {
+        fetch('../files/revoke-permission.php?id=' + id)
+            .then(response => response.text())
+            .then(data => {
+                if (data === 'success') {
+                    document
+                        .getElementById('user-row-' + id)
+                        .remove();
+                }
+            })
+    }
+</script>
 
 </html>

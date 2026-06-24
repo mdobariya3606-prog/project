@@ -7,6 +7,7 @@ require '../functions/Helper.php';
 $helper = new Helper($conn);
 require '../middleware/auth.php';
 require '../middleware/status.php';
+require '../middleware/permission.php';
 require '../middleware/file.php';
 include '../include/header.php';
 
@@ -18,9 +19,6 @@ $stmt->bind_param('ii', $user_id, $id);
 $stmt->execute();
 $result = $stmt->get_result();
 $file = $result->fetch_assoc();
-if ($file['permission'] != 'ALL') {
-    die('unauthorized');
-}
 
 $result = $helper->getDocumentById($id);
 
@@ -30,7 +28,7 @@ if ($result->num_rows == 0) {
 $file = $result->fetch_assoc();
 
 if ($file['owner_id'] == 1) {
-    $path = '../../uploads/admin/'. $file['file_name'] . '.' . $file['extension'];
+    $path = '../../uploads/admin/' . $file['file_name'] . '.' . $file['extension'];
 } else {
     $path = '../../uploads/user/' . $file['owner_id'] . '/' . $file['file_name'] . '.' . $file['extension'];
 }

@@ -13,5 +13,5 @@ $file = $result->fetch_assoc();
 if ($_SESSION['admin']) {
 } else if (!empty($file) || $file['permission'] == "SHARE") {
 } else if (empty($file) || $file['permission'] != "ALL") {
-    die('unauthorized1');
+    die('unauthorized');
 }

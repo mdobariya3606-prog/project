@@ -19,7 +19,13 @@ $sql = 'select created_at from document_info where owner_id = ? order by created
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
-$lastUpload = $stmt->get_result()->fetch_assoc()['created_at'];
+$lastUploadResult = $stmt->get_result();
+
+if ($lastUploadResult->num_rows > 0) {
+    $lastUpload = $lastUploadResult->fetch_assoc()['created_at'];
+} else {
+    $lastUpload = "No recent uploads";
+}
 
 $stmt = $conn->prepare('
 SELECT count(*) AS total

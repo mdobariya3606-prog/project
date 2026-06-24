@@ -36,4 +36,4 @@ $stmt = $conn->prepare('delete from document_user_permission where id = ?');
 $stmt->bind_param('i', $id);
 $stmt->execute();
 
-header("Location: permissions.php?id=$id");
+echo 'success';
