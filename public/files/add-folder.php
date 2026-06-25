@@ -16,11 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $dir = $helper->getFolderPath($_SESSION['folder']['id']);
 
-        if ($_SESSION['admin']) {
-            $path = '../../uploads/' . $dir . '/' . $newDIR;
-        } else {
-            $path = '../../uploads/user/' . $dir . '/' . $newDIR;
-        }
+        $path = '../../uploads/' . $dir . '/' . $newDIR;
 
         if (is_dir($path)) {
             $err = 'folder already exists';

@@ -50,9 +50,12 @@ $folders = $stmt->get_result();
     <title>Files</title>
     <style>
         .search {
+            display: block;
             padding: 10px;
             margin: 10px;
             width: 200px;
+            border-radius: 4px;
+            border: 1px solid #333;
         }
     </style>
 </head>
@@ -60,34 +63,41 @@ $folders = $stmt->get_result();
 <body>
     <a href="../files/add-folder.php" class="btn-add-file">Add Folder 📁</a>
     <a href="../files/add-file.php" class="btn-add-file">Add File 📄</a>
-    <input type="text" class="search" id="search" placeholder="search files/type/users">
 
     <div class="folder-container">
-        <table class="profile-table">
-            <thead>
-                <tr>
-                    <th>folder_name</th>
-                </tr>
-            </thead>
+        <table class="folder-table">
 
-            <tbody>
-                <?php if ($_SESSION['folder']['parent_id'] != 1 && $_SESSION['folder']['parent_id'] != null) { ?>
-                    <tr>
-                        <td>
-                            <a href="../files/previous.php">..</a>
-                        </td>
-                    </tr>
-                    <?php } ?>
-                    <?php while ($folder = $folders->fetch_assoc()) { ?>
-                        <tr>
-                            <td>
-                                <a href="../files/open-folder.php?id=<?php echo $folder['id'] ?>"><?php echo $folder['folder_name']; ?></a>
-                            </td>
-                        </tr>
-                    <?php } ?>
-            </tbody>
+            <tr>
+                <th>Folder name</th>
+                <th>Delete</th>
+            </tr>
+
+            <?php if (
+                ($_SESSION['admin'] && $_SESSION['folder']['parent_id'] != null)
+                || !$_SESSION['admin'] && $_SESSION['folder']['parent_id'] != 1
+            ) { ?>
+                <tr>
+                    <td>
+                        <a href="../files/previous.php">..</a>
+                    </td>
+                </tr>
+            <?php } ?>
+
+            <?php while ($folder = $folders->fetch_assoc()) { ?>
+                <tr id="folder-row-<?php echo $folder['id']; ?>">
+                    <td>
+                        <a href="../files/open-folder.php?id=<?php echo $folder['id'] ?>" class="folder-name"><?php echo $folder['folder_name']; ?>/</a>
+                    </td>
+                    <td>
+                        <a onclick="deleteFolder(<?php echo $folder['id']; ?>)" class="btn delete">Delete</a>
+                    </td>
+                </tr>
+            <?php } ?>
+
         </table>
     </div>
+
+    <input type="text" class="search" id="search" placeholder="search files/type/users">
 
     <div class="file-container" , id="file-container">
         <?php if ($result->num_rows > 0) {
@@ -139,6 +149,21 @@ $folders = $stmt->get_result();
                     if (data.trim() === 'success') {
                         document
                             .getElementById('file-row-' + id)
+                            .remove();
+                    }
+                })
+        }
+    }
+
+    function deleteFolder(id) {
+        if (confirm('delete this folder?')) {
+            fetch('../files/delete-folder.php?id=' + id)
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    if (data.trim() === 'success') {
+                        document
+                            .getElementById('folder-row-' + id)
                             .remove();
                     }
                 })

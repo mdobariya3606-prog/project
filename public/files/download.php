@@ -14,11 +14,9 @@ $id = $_GET['id'];
 $result = $helper->getDocumentById($id);
 $file = $result->fetch_assoc();
 
-if ($file['owner_id'] == 1) {
-    $path = '../../uploads/admin/' . $file['file_name'] . '.' . $file['extension'];
-} else {
-    $path = '../../uploads/user/' . $file['owner_id'] . '/' . $file['file_name'] . '.' . $file['extension'];
-}
+
+$path = '../../uploads/' . $helper->getFolderPath($_SESSION['folder']['id']) . '/' . $file['file_name'] . '.' . $file['extension'];
+
 
 if (file_exists($path)) {
     if (ob_get_level()) {

@@ -56,6 +56,8 @@ if ($result->num_rows > 0) {
             </div>
         </div>
 <?php }
-} else { 
-    echo "<h3>No result found</h3>";
+} else {
+    echo "<h4 style='margin: 10px;'>No result found</h4>";
 }
+
+?>

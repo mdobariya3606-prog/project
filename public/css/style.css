@@ -224,8 +224,8 @@ button {
 /* ================================================
    BUTTONS
    ================================================ */
-.share-files .btn-share,
-.delete-users .btn-delete {
+.btn-delete,
+.share-files .btn-share {
   width: auto;
   min-width: 100px;
   padding: 10px;
@@ -242,7 +242,7 @@ button {
 .btn-change-pass {
   text-align: center;
   width: 300px;
-  display: block;
+  display: inline-block;
   border: 1px solid #333;
   border-radius: 4px;
   padding: 8px 12px;
@@ -364,12 +364,12 @@ button {
 }
 
 /* ================================================
-   FILE GRID
+   FILE GRID, FOLDERS
    ================================================ */
 .file-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  /* gap: 20px; */
 }
 
 .file-box {
@@ -377,6 +377,7 @@ button {
   border: 1px solid #ddd;
   border-radius: 8px;
   background: #fff;
+  margin: 10px;
 }
 
 .file-box h3 {
@@ -415,6 +416,24 @@ button {
 .navigation span {
   padding: 8px 12px;
 }
+
+.folder-table {
+  border-collapse: collapse;
+  width: 50%;
+  text-align: center;
+  margin: 10px;
+}
+
+.folder-table tr,
+th,
+td {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.folder-table a {
+}
+
 
 /* ================================================
    UTILITIES
@@ -530,7 +549,7 @@ button {
 
   .btn-add-file,
   .btn-update {
-    display: block;
+    display: inline-block;
     margin: 8px 0;
   }
 
