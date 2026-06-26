@@ -6,7 +6,11 @@ include '../functions/Helper.php';
 /** @var mysqli $conn */
 
 $helper = new Helper($conn);
-$helper->isLoggedOut();
+try {
+    $helper->isLoggedOut();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 /** @var mysqli $conn */
 include '../../config/bootstrap.php';
@@ -17,3 +21,4 @@ session_destroy();
 $helper->logAction($userId, 'LOGOUT');
 
 header('Location: login.php');
+exit;

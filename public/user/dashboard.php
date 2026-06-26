@@ -11,16 +11,25 @@ $helper = new Helper($conn);
 $user_id = $_SESSION['user']['id'];
 
 $stmt = $conn->prepare('select count(*) as total from document_info where owner_id = ?');
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 $stmt->bind_param('i', $user_id);
-$stmt->execute();
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 $result = $stmt->get_result();
 $total = $result->fetch_assoc();
 $totalDocuments = $total['total'];
 
-$sql = 'select created_at from document_info where owner_id = ? order by created_at desc limit 1';
-$stmt = $conn->prepare($sql);
+$stmt = $conn->prepare('select created_at from document_info where owner_id = ? order by created_at desc limit 1');
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 $stmt->bind_param('i', $user_id);
-$stmt->execute();
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 $lastUploadResult = $stmt->get_result();
 
 if ($lastUploadResult->num_rows > 0) {
@@ -30,16 +39,23 @@ if ($lastUploadResult->num_rows > 0) {
 }
 
 $stmt = $conn->prepare('
-SELECT count(*) AS total
-FROM document_user_permission p
-JOIN document_info d
-    ON p.document_id = d.document_id
-JOIN user_info u
-    ON d.owner_id = u.id
-WHERE p.user_id = ? and d.owner_id != ?');
+select count(*) as total
+from document_user_permission p
+join document_info d
+    on p.document_id = d.document_id
+join user_info u
+    on d.owner_id = u.id
+where p.user_id = ? and d.owner_id != ?');
+
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 
 $stmt->bind_param('ii', $user_id, $user_id);
-$stmt->execute();
+
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 $result = $stmt->get_result();
 $total = $result->fetch_assoc();
 $sharedFiles = $total['total'];
@@ -52,16 +68,27 @@ $stmt = $conn->prepare('
     join user_info u 
     on d.owner_id = u.id 
     where d.owner_id = ? order by created_at desc limit 5');
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 
 $stmt->bind_param('i', $_SESSION['user']['id']);
-$stmt->execute();
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 
 $result = $stmt->get_result();
 
-$sql = 'select extension, count(*) as total from document_info where owner_id = ? group by extension';
-$stmt = $conn->prepare($sql);
+$stmt = $conn->prepare('select extension, count(*) as total from document_info where owner_id = ? group by extension');
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
+
 $stmt->bind_param('i', $user_id);
-$stmt->execute();
+
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 
 $extResult = $stmt->get_result();
 
@@ -110,7 +137,7 @@ $extResult = $stmt->get_result();
                 </tr>
                 <?php while ($extRow = $extResult->fetch_assoc()) { ?>
                     <tr>
-                        <td><?php echo $extRow['extension']; ?></td>
+                        <td><?php echo htmlspecialchars($extRow['extension']); ?></td>
                         <td><?php echo $extRow['total']; ?></td>
                     </tr>
                 <?php } ?>
@@ -122,9 +149,9 @@ $extResult = $stmt->get_result();
                 <?php if ($result->num_rows > 0) {
                     while ($file = $result->fetch_assoc()) { ?>
                         <div class="file-box">
-                            <h3><?php echo $file['original_name'] ?></h3>
+                            <h3><?php echo htmlspecialchars($file['original_name']); ?></h3>
 
-                            <p>Type: <?php echo $file['extension']; ?></p>
+                            <p>Type: <?php echo htmlspecialchars($file['extension']); ?></p>
                             <p>Size: <?php echo round($file['file_size'] / (1024 * 1024), 2); ?> MB</p>
                             <p>Uploaded: <?php echo date('d-m-Y', strtotime($file['created_at'])); ?></p>
                         </div>

@@ -9,14 +9,14 @@ $helper = new Helper($conn);
 $email = $emailErr = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $email = $helper->validate($_POST['email']);
     $emailErr = $helper->checkRequire($email);
 
     if (empty($emailErr)) {
         $result = $helper->getUserByEmail($email);
 
         if ($result->num_rows == 0) {
-            $emailErr = "email does not exists";
+            $emailErr = "User not found";
         } else {
             $user = $result->fetch_assoc();
 
@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['otp-sent'] = true;
 
             header("Location: ../functions/verify-otp.php");
+            exit;
         }
     }
 }
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="forget-pass">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <span class="error"><?php echo $emailErr; ?></span>
+            <span class="error"><?php echo htmlspecialchars($emailErr); ?></span>
             <input type="email" name="email" id="email" placeholder="Enter Email">
             
             <button type="submit">send code</button>

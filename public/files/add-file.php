@@ -2,7 +2,6 @@
 include '../session.php';
 include '../functions/Helper.php';
 require '../middleware/auth.php';
-require '../middleware/status.php';
 include '../../config/bootstrap.php';
 include '../include/header.php';
 /** @var mysqli $conn */
@@ -14,15 +13,17 @@ $file = $message = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file = $_FILES['document'];
 
-    if (empty($file['size'])) {
-        $message = "select file";
+    if ($file['error'] === UPLOAD_ERR_NO_FILE) {
+        $message = 'Select file';
+    } elseif ($file['error'] !== UPLOAD_ERR_OK) {
+        $message = 'File upload failed';
     }
 
     if (empty($message)) {
-        $fileName = $file['name'];
+        $fileName = $helper->validate($file['name']);
         $tmpName = $file['tmp_name'];
         $fileSize = $file['size'];
-        $allowed = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'php'];
+        $allowed = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'];
         $extenstion = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         // check user storage limit
@@ -40,16 +41,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($message)) {
             $newName = uniqid($_SESSION['user']['id'] . '.', true);
-            $destination = '../../uploads/' . $helper->getFolderPath($_SESSION['folder']['id']) . '/' . $newName . '.' . $extenstion;
+            $destination = "";
 
+            $conn->begin_transaction();
+            try {
+                $destination = '../../uploads/' . $helper->getFolderPath($_SESSION['folder']['id']) . '/' . $newName . '.' . $extenstion;
 
-            if (move_uploaded_file($tmpName, $destination)) {
+                if (!move_uploaded_file($tmpName, $destination)) {
+                    throw new Exception('File upload failed');
+                }
+
                 $original_name = pathinfo($fileName, PATHINFO_FILENAME);
                 $document_id = $helper->addDocument($original_name, $newName, $fileSize, $extenstion);
                 $message = 'file uploaded successfully';
                 $helper->addPermission($_SESSION['user']['id'], $document_id, "ALL");
-            } else {
-                $message = 'file upload failed';
+                $conn->commit();
+            } catch (Exception $e) {
+                if (file_exists($destination)) {
+                    unlink($destination);
+                }
+
+                $conn->rollback();
+                throw $e;
             }
         }
     }
@@ -68,15 +81,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="upload-file">
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
             <div class="upload-box" id="uploadBox">
 
                 <input type="file" id="fileInput" name="document">
                 <div class="upload-icon">📄</div>
+
                 <h3>Drop files here</h3>
                 <small>PDF, DOCX, XLSX, PPT</small>
                 <span id="fileName">No file selected</span>
-                <span class="error"><?php echo $message; ?></span>
+                <span class="error"><?php echo htmlspecialchars($message); ?></span>
 
             </div>
             <button type="submit">Add file</button>

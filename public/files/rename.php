@@ -13,29 +13,43 @@ require '../middleware/permission.php';
 require '../middleware/file.php';
 include '../include/header.php';
 
-$id = $_GET['id'];
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($id === false || $id === null) {
+    throw new Exception('Invalid id');
+}
 
 $result = $helper->getDocumentById($id);
+
+if ($result->num_rows === 0) {
+    throw new Exception('Document not found');
+}
+
 $file = $result->fetch_assoc();
 
 $newName = $newNameErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $newName = htmlspecialchars(trim($_POST['file_name']));
+    $newName = $helper->validate($_POST['file_name']);
 
-    if (empty($newName)) {
-        $newNameErr = "required";
-    } else if (!preg_match('/^[a-zA-Z0-9()-. ]*$/', $newName)) {
+    $newNameErr = $helper->checkRequire($newName);
+    if (empty($newNameErr) && !preg_match('/^[a-zA-Z0-9()-. ]*$/', $newName)) {
         $newNameErr = "Invalid file name";
     }
 
     if (empty($newNameErr)) {
         $stmt = $conn->prepare('update document_info set original_name = ? where document_id = ?');
+        if (!$stmt) {
+            throw new Exception($conn->error);
+        }
         $stmt->bind_param('si', $newName, $id);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception($stmt->error);
+        }
         $helper->logDocument($_SESSION['user']['id'], $file['document_id'], 'RENAME');
 
         header('Location: all-files.php');
+        exit;
     }
 }
 
@@ -53,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="rename-form">
         <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $id; ?>" method="post">
-            <span class="error"><?php echo $newNameErr; ?></span>
-            <input type="text" name="file_name" id="file_name" value="<?php echo $file['original_name']; ?>">
+            <span class="error"><?php echo htmlspecialchars($newNameErr); ?></span>
+            <input type="text" name="file_name" id="file_name" value="<?php echo htmlspecialchars($file['original_name']); ?>">
             <button type="submit">rename-file</button>
         </form>
     </div>

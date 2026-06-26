@@ -3,8 +3,8 @@ require '../session.php';
 require '../middleware/auth.php';
 require '../middleware/status.php';
 require '../../config/bootstrap.php';
-include '../functions/Helper.php';
-include '../include/header.php';
+require '../functions/Helper.php';
+require '../include/header.php';
 /** @var mysqli $conn */
 
 $helper = new Helper($conn);
@@ -17,29 +17,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nameErr = $helper->checkRequire($name);
     $emailErr = $helper->checkRequire($email);
 
-    if (!preg_match('/^[a-zA-Z ]*$/', $name)) {
+    if (empty($nameErr) && !preg_match('/^[a-zA-Z ]*$/', $name)) {
         $nameErr = 'only character allowed';
-    }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (empty($emailErr) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = 'wrong email format';
     }
 
     if (empty($nameErr) && empty($emailErr)) {
 
         $result = $helper->getUserByEmail($email);
-        $user = $result->fetch_assoc();
 
-        if ($result->num_rows != 0 && $_SESSION['user']['email'] != $email) {
+        if ($result->num_rows !== 0 && $_SESSION['user']['email'] !== $email) {
             $emailErr = 'email already exists';
         } else {
-            $helper->updateUser($_SESSION['user']['id'], $name, $email);
-            $_SESSION['user']['name'] = $name;
-            $_SESSION['user']['email'] = $email;
+            $conn->begin_transaction();
+            try {
+                $helper->updateUser($_SESSION['user']['id'], $name, $email);
+                $_SESSION['user']['name'] = $name;
+                $_SESSION['user']['email'] = $email;
 
-            $helper->logAction($_SESSION['user']['id'], 'UPDATE_PROFILE');
+                $helper->logAction($_SESSION['user']['id'], 'UPDATE_PROFILE');
 
-            header("Location: ../user/profile.php");
+                $conn->commit();
+                header("Location: ../user/profile.php");
+                exit;
+            } catch (Exception $e) {
+                $conn->rollback();
+                throw $e;
+            }
         }
     }
 }
@@ -52,19 +57,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Update Profile</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
     <div class="auth-form">
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
-            <span class="error"><?php echo $nameErr; ?></span>
-            <input type="text" name="name" id="name" value="<?php echo $_SESSION['user']['name']; ?>" placeholder="Name">
+            <span class="error"><?php echo htmlspecialchars($nameErr); ?></span>
+            <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($name ?: $_SESSION['user']['name']); ?>" placeholder="Name">
 
-            <span class="error"><?php echo $emailErr; ?></span>
-            <input type="email" name="email" id="email" value="<?php echo $_SESSION['user']['email'] ?>" placeholder="Email">
+            <span class="error"><?php echo htmlspecialchars($emailErr); ?></span>
+            <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email ?: $_SESSION['user']['email']); ?>" placeholder="Email">
 
             <button type="submit">Update profile</button>
         </form>

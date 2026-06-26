@@ -9,24 +9,48 @@ include '../include/header.php';
 $helper = new Helper($conn);
 $err = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $newDIR = $_POST['newDIR'];
+    $newDIR = $helper->validate($_POST['newDIR']);
 
     if (empty($newDIR)) {
         $err = "required";
     } else {
-        $dir = $helper->getFolderPath($_SESSION['folder']['id']);
+        try {
+            $dir = $helper->getFolderPath($_SESSION['folder']['id']);
+        } catch (Exception $e) {
+            throw $e;
+        }
 
         $path = '../../uploads/' . $dir . '/' . $newDIR;
 
         if (is_dir($path)) {
-            $err = 'folder already exists';
+            $err = 'Folder already exists';
         } else {
-            mkdir($path, 0777, true);
+            $conn->begin_transaction();
 
-            $stmt = $conn->prepare('insert into user_folder (folder_name, user_id, parent_id) values (?, ?, ?)');
-            $stmt->bind_param('sii', $newDIR, $_SESSION['user']['id'], $_SESSION['folder']['id']);
-            $stmt->execute();
-            header('Location: ../files/all-files.php');
+            try {
+                if (!mkdir($path, 0777, true) && !is_dir($path)) {
+                    throw new Exception('Folder creation failed');
+                }
+                $stmt = $conn->prepare('insert into user_folder (folder_name, user_id, parent_id) values (?, ?, ?)');
+                if (!$stmt) {
+                    throw new Exception($conn->error);
+                }
+
+                $stmt->bind_param('sii', $newDIR, $_SESSION['user']['id'], $_SESSION['folder']['id']);
+                if (!$stmt->execute()) {
+                    throw new Exception($stmt->error);
+                }
+                $conn->commit();
+
+                header('Location: ../files/all-files.php');
+                exit;
+            } catch (Exception $e) {
+                if (is_dir($path)) {
+                    rmdir($path);
+                }
+                $conn->rollback();
+                throw $e;
+            }
         }
     }
 }
@@ -45,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="change-pass">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <span class="error"><?php echo $err ?></span>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+            <span class="error"><?php echo htmlspecialchars($err); ?></span>
             <input type="text" name="newDIR" id="newDIR">
             <button type="submit">create-folder</button>
         </form>

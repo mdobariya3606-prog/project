@@ -9,7 +9,7 @@ if (
 ) {
     header("Location: ../files/all-files.php");
     exit;
-} 
+}
 $stmt = $conn->prepare('select * from user_folder where id = ?');
 $stmt->bind_param('i', $_SESSION['folder']['parent_id']);
 $stmt->execute();
@@ -20,3 +20,4 @@ if ($result->num_rows > 0) {
 }
 
 header("Location: ../files/all-files.php");
+exit;

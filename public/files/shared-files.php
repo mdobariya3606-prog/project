@@ -9,18 +9,24 @@ include '../include/header.php';
 $helper = new Helper($conn);
 
 $stmt = $conn->prepare('
-SELECT d.*, p.type AS permission, u.name AS owner_name
-FROM document_user_permission p
-JOIN document_info d
-    ON p.document_id = d.document_id
-JOIN user_info u
-    ON d.owner_id = u.id
-WHERE p.user_id = ? and d.owner_id != ?');
+select d.*, p.type AS permission, u.name as owner_name
+from document_user_permission p
+join document_info d
+    on p.document_id = d.document_id
+join user_info u
+    on d.owner_id = u.id
+where p.user_id = ? and d.owner_id != ?');
+
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 
 $user_id = $_SESSION['user']['id'];
 $stmt->bind_param('ii', $user_id, $user_id);
 
-$stmt->execute();
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 
 $result = $stmt->get_result();
 
@@ -40,21 +46,22 @@ $result = $stmt->get_result();
         <?php if ($result->num_rows > 0) {
             while ($file = $result->fetch_assoc()) { ?>
                 <div class="file-box" id="file-box-<?php echo $file['document_id']; ?>">
-                    <h3><?php echo $file['original_name'] ?></h3>
+                    <h3><?php echo htmlspecialchars($file['original_name']); ?></h3>
 
-                    <p>Type: <?php echo $file['extension']; ?></p>
+                    <p>Type: <?php echo htmlspecialchars($file['extension']); ?></p>
                     <p>Size: <?php echo ceil($file['file_size'] / 1048); ?> KB</p>
-                    <p>Owner: <?php echo $file['owner_name']; ?></p>
-                    <p>Uploaded: <?php echo $file['created_at']; ?></p>
+                    <p>Owner: <?php echo htmlspecialchars($file['owner_name']); ?></p>
+                    <p>Uploaded: <?php echo htmlspecialchars($file['created_at']); ?></p>
 
                     <div class="actions">
-                        <a href="download.php?id=<?php echo $file['document_id']; ?>" class="btn">Download</a>
+                        <a href="../files/download.php?id=<?php echo $file['document_id']; ?>" class="btn">Download</a>
                         <?php if ($file['permission'] == 'SHARE') { ?>
-                            <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
+                            <a href="../files/share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
 
                         <?php } else if ($file['permission'] == 'ALL') { ?>
-                            <a href="share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
-                            <a href="rename.php?id=<?php echo $file['document_id']; ?>" class="btn">Rename</a>
+                            <a href="../files/share-file.php?id=<?php echo $file['document_id']; ?>" class="btn">Share</a>
+                            <a href="../files/rename.php?id=<?php echo $file['document_id']; ?>" class="btn">Rename</a>
+                            <a href="../files/permissions.php?id=<?php echo $file['document_id']; ?>" class="btn">Permissions</a>
 
                             <a onclick="deleteFile(<?php echo $file['document_id']; ?>)" class="btn delete">Delete</a>
                         <?php } ?>
@@ -70,7 +77,7 @@ $result = $stmt->get_result();
             fetch('../files/delete-file.php?id=' + id)
                 .then(response => response.text())
                 .then(data => {
-                    if (data === 'success') {
+                    if (data.trim() === 'success') {
                         document.getElementById('file-box-' + id).remove();
                     }
                 })

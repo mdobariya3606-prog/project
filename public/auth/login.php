@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emailErr = $helper->checkRequire($email);
     $passwordErr = $helper->checkRequire($password);
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (empty($emailErr) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = 'wrong email format';
     }
 
@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = $helper->getUserByEmail($email);
 
-        if ($result->num_rows == 0) {
-            $emailErr = 'email does not exists';
+        if ($result->num_rows === 0) {
+            $emailErr = 'wrong credentials';
         } else {
             $row = $result->fetch_assoc();
             if (password_verify($password, $row['password'])) {
@@ -40,14 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $email = $row['email'];
 
+                session_regenerate_id(true);
                 $_SESSION['user'] = $row;
 
-                $_SESSION['admin'] = ($_SESSION['user']['role'] == 'ADMIN') ? true : false;
+                $_SESSION['admin'] = $_SESSION['user']['role'] === 'ADMIN';
 
                 if (!$_SESSION['admin']) {
                     $folder = mysqli_query($conn, 'select * from user_folder where parent_id = 1 and user_id = ' . $row['id'])->fetch_assoc();
                 } else {
                     $folder = mysqli_query($conn, 'select * from user_folder where user_id = ' . $row['id'])->fetch_assoc();
+                }
+
+                if(!$folder) {
+                    throw new Exception('user folder not found');
                 }
 
                 $_SESSION['folder'] = $folder;
@@ -56,11 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($_SESSION['admin']) {
                     header('Location: ../admin/dashboard.php');
+                    exit;
                 } else {
                     header("Location: ../user/dashboard.php");
+                    exit;
                 }
             } else {
-                $emailErr = "wrong email or password";
+                $emailErr = "wrong credentials";
             }
         }
     }
@@ -80,13 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="auth-form">
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
             <span class="error"><?php echo $emailErr; ?></span>
-            <input type="email" name="email" id="email" value="<?php echo $email ?>" placeholder="Email">
+            <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="Email">
 
             <span class="error"><?php echo $passwordErr; ?></span>
-            <input type="password" name="password" id="password" value="<?php echo $password ?>" placeholder="Password">
+            <input type="password" name="password" id="password" placeholder="Password">
 
             <button type="submit">Login</button>
             <pre><a href="../functions/forget-password.php" class="link">forgot password?</a></pre>

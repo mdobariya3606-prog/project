@@ -14,22 +14,31 @@ $helper = new Helper($conn);
 $users = $helper->getAllUsers();
 $error = "";
 
-if (isset($_POST['btn-delete'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['user_ids'])) {
         $error = "select any user.";
     } else {
 
-        foreach ($_POST['user_ids'] as $key => $id) {
-            $helper->deleteUserFolder($id);
-            if ($_SESSION['user']['id'] == $id) {
-                session_destroy();
+        $conn->begin_transaction();
+        try {
+            foreach ($_POST['user_ids'] as $id) {
+                $helper->deleteUserFolder($id);
             }
+
+            $idList = array_map('intval', $_POST['user_ids']);
+            $ids = implode(',', $idList);
+            $sql = mysqli_query($conn, "delete from user_info where id in ($ids)");
+
+            if (!$sql) {
+                throw new Exception($conn->error);
+            }
+
+            $conn->commit();
+            $users = $helper->getAllUsers();
+        } catch (Exception $e) {
+            $conn->rollback();
+            throw $e;
         }
-
-        $ids = implode(',', $_POST['user_ids']);
-        $sql = mysqli_query($conn, "delete from user_info where id in ($ids)");
-
-        $users = $helper->getAllUsers();
     }
 }
 
@@ -50,8 +59,9 @@ if (isset($_POST['btn-delete'])) {
             <a href="../admin/change-user-password.php" class="btn-change-pass">Change user password</a>
 
             <h2>Delete users</h3>
-                <span class="error"><?php echo $error; ?></span>
-                <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
+                <span class="error"><?php echo htmlspecialchars($error); ?></span>
+
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                     <table class="user-table">
                         <tr>
                             <th class="check">Select Users</th>
@@ -64,8 +74,8 @@ if (isset($_POST['btn-delete'])) {
                                 while ($user = mysqli_fetch_assoc($users)) {
                                     if ($user['role'] !== 'ADMIN') { ?>
                                         <td><input type="checkbox" name="user_ids[]" value="<?php echo $user['id']; ?>" id=""></td>
-                                        <td class="name"><?php echo $user['name']; ?></td>
-                                        <td><?php echo $user['email']; ?></td>
+                                        <td class="name"><?php echo htmlspecialchars($user['name']); ?></td>
+                                        <td><?php echo htmlspecialchars($user['email']); ?></td>
                         </tr>
             <?php }
                                 }

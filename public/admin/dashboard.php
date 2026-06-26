@@ -11,7 +11,7 @@ require '../include/header.php';
 
 $helper = new Helper($conn);
 
-$users = mysqli_query($conn, 'select u.*, count(*) as t from user_info u join document_info d on u.id = d.owner_id group by u.id');
+$users = mysqli_query($conn, 'select u.*, count(d.document_id) as total from user_info u left join document_info d on u.id = d.owner_id group by u.id');
 
 $storages = $helper->getStoragePerUser();
 $total = $helper->getTotalStorage();
@@ -60,7 +60,7 @@ function checkStorage($usage)
                                 <td><?php echo $user['status']; ?></td>
                                 <td><?php echo $user['can_share']; ?></td>
                                 <td><?php echo date('Y-m-d', strtotime($user['created_at'])); ?></td>
-                                <td><?php echo $user['t']; ?></td>
+                                <td><?php echo $user['total']; ?></td>
                             </tr>
                 <?php }
                     }
@@ -81,7 +81,7 @@ function checkStorage($usage)
                             <td><?php echo $storage['user_id']; ?></td>
                             <td><?php echo round($storage['total'] / 1024, 2); ?></td>
                             <td><?php echo round($storage['total'] / (1024 * 1024), 2); ?></td>
-                            <td><b><?php checkStorage($storage['total'] / (1024 * 1024)); ?></b></td>
+                            <td><?php checkStorage($storage['total'] / (1024 * 1024)); ?></td>
                         </tr>
                 <?php }
                 } ?>
@@ -90,6 +90,7 @@ function checkStorage($usage)
                     <td><b>Total Usage</b></td>
                     <td><b><?php echo round($total / 1024, 2) ?></b></td>
                     <td><b><?php echo round($total / 1024 / 1024, 2) ?></b></td>
+                    <td></td>
                 </tr>
             </table>
 

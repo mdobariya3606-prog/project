@@ -16,15 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emailErr = $helper->checkRequire($email);
     $passwordErr = $helper->checkRequire($password);
 
-    if (!preg_match('/^[a-zA-Z ]*$/', $name)) {
+    if (empty($nameErr) && !preg_match('/^[a-zA-Z ]*$/', $name)) {
         $nameErr = 'only character allowed';
-    }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (empty($emailErr) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailErr = 'wrong email format';
-    }
-
-    if (strlen($password) < 5) {
+    } elseif (empty($passwordErr) && strlen($password) < 5) {
         $passwordErr = "minimum 5 character required";
     }
 
@@ -32,18 +28,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user = $helper->getUserByEmail($email);
 
-        if ($user->num_rows != 0) {
+        if ($user->num_rows !== 0) {
             $emailErr = 'email already exists';
         } else {
-            $helper->addUser($name, $email, $password);
+            $conn->begin_transaction();
+            try {
+                $user_id = $helper->addUser($name, $email, $password);
+    
+                $helper->logAction($user_id, 'REGISTER');
+                $helper->createUserFolder($user_id);
 
-            $user = mysqli_fetch_assoc($helper->getUserByEmail($email));
-            $helper->logAction($user['id'], 'REGISTER');
-
-            $folder = '../../uploads/user/' . $user['id'];
-            mkdir($folder, 0777, true);
-
-            header("Location: login.php");
+                $conn->commit();
+    
+                header("Location: login.php");
+                exit;
+            } catch (Exception $e) {
+                $conn->rollback();
+                throw $e;
+            }
         }
     }
 }
@@ -62,16 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="auth-form">
-        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
             <span class="error"><?php echo $nameErr; ?></span>
-            <input type="text" name="name" id="name" value="<?php echo $name ?>" placeholder="Name">
+            <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($name) ?>" placeholder="Name">
 
             <span class="error"><?php echo $emailErr; ?></span>
-            <input type="email" name="email" id="email" value="<?php echo $email ?>" placeholder="Email">
+            <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email) ?>" placeholder="Email">
 
             <span class="error"><?php echo $passwordErr; ?></span>
-            <input type="password" name="password" id="password" value="<?php echo $password ?>" placeholder="Password">
+            <input type="password" name="password" id="password" placeholder="Password">
 
             <button type="submit">Register</button>
 

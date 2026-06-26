@@ -1,5 +1,232 @@
-- xampp was crashed
-- xampp set up
-- folder module
-- user/admin can add sub folders
-- can upload files in subfolders
+Helper.php
+    - Added mysqli type hint in constructor.
+    - Added exit after redirect in alreadyLoggedIn().
+    - Replaced die() with Exception throughout Helper.php.
+    - Added prepare() validation for database queries.
+    - Reused logDocument() instead of duplicate audit log insertion.
+    - Added transaction with try-catch for recursive folder deletion.
+    - Fixed recursive deletion to use a single transaction.
+    - Added rollback and rethrow on delete failure.
+    - Added folder existence validation in getFolderPath().
+    - Added OTP expiry validation (expires_at > NOW()).
+    - Simplified boolean return statements.
+    - Improved rmdir() failure handling with exceptions.
+    - addUser() now returns inserted user id using insert_id.
+    - addDocument() now returns inserted document id using insert_id instead of querying by filename.
+    - Added createUserFolder() helper function.
+    - Moved user folder creation logic into Helper.php.
+    - Added mkdir() failure validation before inserting folder into database.
+
+login.php
+    - Added session_regenerate_id(true) after successful login.
+    - Added exit after redirect.
+    - Used strict comparison (===) for login validation.
+    - Simplified admin role assignment.
+    - Added validation for missing user root folder.
+    - Escaped PHP_SELF in form action.
+    - Escaped email before displaying it.
+    - Removed password value from password input.
+
+register.php
+    - Added transaction while registering a user.
+    - Added rollback and rethrow on registration failure.
+    - Used insert_id returned from addUser().
+    - Used createUserFolder() helper method.
+    - Escaped PHP_SELF in form action.
+    - Escaped name and email before displaying.
+    - Used strict comparison (!==) for duplicate email check.
+    - Performed format validation only after required validation passes.
+    - Added exit after successful redirect.
+
+dashboard.php
+    - Replaced die() with exceptions.
+    - Added missing execute() before get_result() in file type query.
+    - Escaped original file names before displaying.
+    - Escaped file extensions before displaying.
+    - Reviewed dashboard queries and output handling.
+
+my-files.php
+    - Replaced die() with exceptions.
+    - Added execute() validation before get_result().
+    - Bound folder id as integer.
+    - Escaped current folder path before displaying.
+    - Escaped file names, owner names and extensions before displaying.
+    - Replaced exception message with a generic fallback when folder path cannot be loaded.
+    - Removed debug console.log() statements.
+    - Reviewed folder navigation, file listing and delete actions.
+
+admin/my-files.php
+    - Replaced die() with exceptions.
+    - Added execute() validation before get_result().
+    - Bound folder id as integer.
+    - Escaped current folder path before displaying.
+    - Escaped folder names before displaying.
+    - Escaped file names before displaying.
+    - Escaped file extensions before displaying.
+    - Escaped owner names before displaying.
+    - Replaced exception message with a generic fallback when folder path cannot be loaded.
+    - Removed debug console.log() statements.
+    - Reviewed folder navigation, file listing and delete actions.
+
+admin/add-folder.php
+    - Escaped PHP_SELF in form action.
+    - Escaped error message before displaying.
+    - Validated folder name using Helper::validate().
+    - Added transaction while creating folder.
+    - Added rollback on failure.
+    - Added cleanup of created folder if database insertion fails.
+    - Rethrew exception after rollback.
+    - Redirected only after successful commit.
+
+user/add-folder.php
+    - Escaped PHP_SELF in form action.
+    - Escaped error message before displaying.
+    - Validated folder name using Helper::validate().
+    - Added transaction while creating folder.
+    - Added mkdir() failure validation.
+    - Added prepare() validation.
+    - Added execute() validation.
+    - Added rollback on failure.
+    - Added cleanup of created folder if database insertion fails.
+    - Rethrew exception after rollback.
+    - Redirected only after successful commit.
+
+admin/add-file.php
+    - Removed unnecessary validation of tmp_name.
+    - Escaped PHP_SELF in form action.
+    - Escaped upload message before displaying.
+    - Added separate handling for no file selected.
+    - Added upload error validation.
+    - Added move_uploaded_file() success validation.
+    - Removed PHP from allowed upload extensions.
+    - Added transaction for upload and database operations.
+    - Added rollback on failure.
+    - Added cleanup of uploaded file if database operations fail.
+
+user/add-file.php
+    - Removed unnecessary validation of tmp_name.
+    - Escaped PHP_SELF in form action.
+    - Escaped upload message before displaying.
+    - Added separate handling for no file selected.
+    - Added upload error validation.
+    - Added move_uploaded_file() success validation.
+    - Removed PHP from allowed upload extensions.
+    - Added transaction for upload and database operations.
+    - Added rollback on failure.
+    - Added cleanup of uploaded file if database operations fail.
+
+shared-files.php
+    - Replaced die() with exceptions.
+    - Added prepare() validation.
+    - Added execute() validation.
+    - Escaped file names before displaying.
+    - Escaped file extensions before displaying.
+    - Escaped owner names before displaying.
+    - Escaped uploaded date before displaying.
+    - Trimmed AJAX response before comparing with 'success'.
+    - Reviewed permission-based actions and shared file listing.
+
+reset-password.php
+    - Added minimum password length validation.
+    - Added transaction for password reset operations.
+    - Added rollback on failure.
+    - Moved session_destroy() after all database operations.
+    - Added exit after redirect.
+    - Escaped PHP_SELF in form action.
+    - Escaped password error before displaying.
+    - Reused stored OTP variable instead of reading $_SESSION again.
+    - Removed unnecessary OTP query parameter from form action.
+    - Recommended committing transaction before destroying the session.
+
+change-password.php
+    - Improved password validation order.
+    - Prevented changing to the current password.
+    - Added transaction for password update and audit log.
+    - Added rollback on failure.
+    - Started transaction only after verifying old password.
+    - Updated session password after successful password change.
+    - Changed audit log action to PASSWORD_CHANGE.
+    - Added exit after redirect.
+    - Escaped PHP_SELF in form action.
+    - Escaped validation errors before displaying.
+
+verify-otp.php
+    - Validated OTP using Helper::validate().
+    - Used strict comparison (===) for num_rows.
+    - Escaped PHP_SELF in form action.
+    - Escaped OTP error before displaying.
+    - Added exit after redirect.
+    - Recommended checking a specific password-reset session variable instead of the entire session.
+
+profile.php
+    - Escaped user name and email before displaying.
+    - Added user existence check before fetch_assoc().
+    - Throws exception if user is not found.
+    - Cached storage usage to avoid duplicate database queries.
+
+update-profile.php
+    - Added validation for name and email fields.
+    - Prevented duplicate email updates while allowing the current user's existing email.
+    - Wrapped profile update and activity logging in a database transaction.
+    - Updated session name and email after successful profile update.
+    - Logged profile update action (UPDATE_PROFILE).
+    - Escaped form action, input values, and error messages with htmlspecialchars().
+    - Preserved entered form values after validation errors.
+    - Added proper redirect with exit after successful update.
+
+dashboard.php
+    - Added a database transaction around user deletion.
+    - Added rollback handling for failed deletion operations.
+    - Added exception handling for failed user deletion queries.
+    - Sanitized user IDs before constructing the DELETE query.
+    - Escaped the error message output.
+    - Escaped the form action URL using htmlspecialchars().
+    - Simplified the foreach loop by removing the unused index variable.
+
+change-status.php
+    - Added user ID validation using filter_input().
+    - Added a check to ensure the user exists before retrieving the updated status.
+
+change-user-password.php
+    - Added user ID validation using filter_input().
+    - Escaped the user ID error message.
+    - Escaped the password error message.
+    - Escaped the form action URL using htmlspecialchars().
+    - Added a check to ensure at least one user exists before rendering the form.
+
+removed admin files
+    - removed add-files, add-folder, delete-folder from admin directory
+    - merged logic in files directory
+
+share-file.php
+    - Added validation for the document ID.
+    - Added validation for the permission type.
+    - Enabled strict comparison for permission validation.
+    - Wrapped permission assignment in a database transaction.
+    - Added rollback handling for failed permission assignment operations.
+    - Escaped the error message output.
+    - Used the validated document ID in the form action URL.
+
+permissions.php
+    - Added validation for the document ID.
+    - Removed the unused user ID variable.
+    - Updated permission queries to display only users shared by the current sender.
+
+file.php
+    - Added validation for the document ID.
+    - Allowed document owners to access their own files without requiring an explicit permission entry.
+
+revoke-permission.php
+    - Added validation for the permission ID.
+    - Added authorization to ensure non-admin users can revoke only permissions they granted.
+    - Fixed share log deletion to use the receiver ID and document ID instead of the permission ID.
+    - Wrapped permission revocation and share log deletion in a database transaction.
+    - Added rollback handling for failed permission revocation operations.
+
+permission.php
+    - Added validation for the document ID.
+    - Added a prepared statement to retrieve the user's document permission.
+    - Restricted non-admin users to documents with ALL permission.
+    - Added exception handling for database prepare and execute failures.
+
+created delete_log so to log document deletion because in audit log there was foreign key with document id and was not inserting

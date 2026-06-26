@@ -14,21 +14,27 @@ if (empty($_SESSION)) {
 
 $otp = $otpErr = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $otp = $_POST['otp'];
+    $otp = $helper->validate($_POST['otp']);
     $otpErr = $helper->checkRequire($otp);
 
     if (empty($otpErr)) {
         $sql = 'select * from password_reset where otp = ? and expires_at > now()';
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception($conn->error);
+        }
         $stmt->bind_param('s', $otp);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception($stmt->error);
+        }
 
         $result = $stmt->get_result();
-        if ($result->num_rows == 0) {
+        if ($result->num_rows === 0) {
             $otpErr = 'wrong otp';
         } else {
             $_SESSION['otp'] = $otp;
             header("Location: reset-password.php");
+            exit;
         }
     }
 }
@@ -46,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="forget-pass">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <span class="error"><?php echo $otpErr; ?></span>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+            <span class="error"><?php echo htmlspecialchars($otpErr); ?></span>
             <input type="text" name="otp" id="otp" placeholder="Otp">
 
             <button type="submit">reset-password</button>

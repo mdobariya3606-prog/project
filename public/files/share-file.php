@@ -16,7 +16,11 @@ require '../middleware/share-access.php';
 require '../middleware/file.php';
 require '../middleware/permission.php';
 
-$document_id = $_GET['id'];
+$document_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($document_id === false || $document_id === null) {
+    throw new Exception('Invalid document id');
+}
 
 $sql = "
 select * 
@@ -26,11 +30,24 @@ where id not in (
 )";
 
 $stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    throw new Exception($conn->error);
+}
 $stmt->bind_param('i', $document_id);
-$stmt->execute();
+
+if (!$stmt->execute()) {
+    throw new Exception($stmt->error);
+}
 $users = $stmt->get_result();
 
-$file = $helper->getDocumentById($document_id)->fetch_assoc();
+$result = $helper->getDocumentById($document_id);
+
+if ($result->num_rows === 0) {
+    throw new Exception('Document not found');
+}
+
+$file = $result->fetch_assoc();
 
 $error = "";
 
@@ -40,15 +57,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "select any user.";
     } else {
         $ids = $_POST['user_ids'];
-        $type = $_POST['type'];
+        $allowed = ['DOWNLOAD', 'SHARE', 'ALL'];    
 
-        foreach ($ids as $id) {
-            $helper->addPermission($id, $document_id, $type);
-            $helper->queueMail($_SESSION['user']['name'], $file['original_name'] . '.' . $file['extension']);
-            $helper->logShare($_SESSION['user']['id'], $id, $document_id);
+        $type = $_POST['type'];
+        if (!in_array($type, $allowed, true)) {
+            throw new Exception('Invalid permission');
+        }
+
+        $conn->begin_transaction();
+        try {
+            foreach ($ids as $id) {
+                $helper->addPermission($id, $document_id, $type);
+                $helper->queueMail($_SESSION['user']['name'], $file['original_name'] . '.' . $file['extension']);
+                $helper->logShare($_SESSION['user']['id'], $id, $document_id);
+            }
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollback();
+            throw $e;
         }
 
         header("Location: all-files.php");
+        exit;
     }
 }
 ?>
@@ -65,14 +95,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <div class="share-files">
-            <span class="error"><?php echo $error; ?></span>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $_GET['id']; ?>" method="post">
+            <span class="error"><?php echo htmlspecialchars($error); ?></span>
+            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?id=<?php echo $document_id; ?>" method="post">
+
                 <h2>Permission</h2>
-                <select name="type" id="" class="permission-type">
+                <select name="type" id="" class="permission-type">  
                     <option value="DOWNLOAD">DOWNLOAD</option>
                     <option value="SHARE">SHARE</option>
                     <option value="ALL">ALL</option>
                 </select>
+
                 <h2>Users</h2>
                 <table class="user-table" style="width: 400px;">
                     <tr>
@@ -82,9 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php if (mysqli_num_rows($users) == 0) {
                             echo "all users have access of this file";
                         } else {
-                            while ($user = mysqli_fetch_assoc($users)) {
+                            while ($user = $users->fetch_assoc()) {
                                 if ($user['role'] !== 'ADMIN' && $user['id'] != $_SESSION['user']['id']) { ?>
-                                    <td><input type="checkbox" name="user_ids[]" value="<?php echo $user['id']; ?>" id=""> <?php echo $user['email']; ?></td>
+                                    <td><input type="checkbox" name="user_ids[]" value="<?php echo $user['id']; ?>" id=""> <?php echo htmlspecialchars($user['email']); ?></td>
                     </tr>
         <?php }
                             }

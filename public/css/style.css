@@ -528,6 +528,7 @@ td {
   .container .user-table {
     min-width: 480px;
     font-size: 13px;
+    border: 1px solid #333;
   }
 
   .container .user-table td,

@@ -14,8 +14,18 @@ $id = $_GET['id'];
 $result = $helper->getDocumentById($id);
 $file = $result->fetch_assoc();
 
+try {
 
-$path = '../../uploads/' . $helper->getFolderPath($_SESSION['folder']['id']) . '/' . $file['file_name'] . '.' . $file['extension'];
+    $stmt = $conn->prepare('select folder_id from document_info where document_id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $doc = $result->fetch_assoc();
+
+    $path = '../../uploads/' . $helper->getFolderPath($doc['folder_id']) . '/' . $file['file_name'] . '.' . $file['extension'];
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 
 if (file_exists($path)) {

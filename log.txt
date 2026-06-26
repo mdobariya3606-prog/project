@@ -1,0 +1,326 @@
+Date: June 09, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Learned Frontend, Backend, Server, Localhost, and PHP fundamentals.
+- Understood PHP internal working and the Request–Response lifecycle.
+- Studied the differences between HTML, CSS, JavaScript, and PHP.
+- Installed XAMPP and configured Apache for local development.
+- Created basic PHP pages (index.php, about.php, contact.php) and implemented reusable components using include().
+- Learned variables, data types, and operators in PHP.
+- Built programs for calculator operations, voting eligibility, even/odd checks, and positive/negative number checks.
+- Learned conditional statements (if, else, elseif, switch) and loops (for, while, do-while, foreach).
+- Created multiplication tables, grade system programs, odd/even/prime number programs, and star pattern programs.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 10, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- PHP functions: function declaration, parameters, and return values.
+- Indexed, associative, and multidimensional arrays.
+- GET and POST methods, form handling, input sanitization, isset(), and empty().
+- PHP sessions for storing and managing user data across pages.
+- Structure and workflow of a Student Registration System.
+- MySQL fundamentals: databases, tables, primary keys, auto increment, and common data types.
+- mysqli database connections, connection handling, and basic SQL operations.
+- Inserting database records using PHP and MySQL.
+- Retrieving database records using PHP and MySQL.
+- Reusable configuration and database files in PHP applications.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 11, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Created an Employee Management System using PHP and MySQL.
+- Implemented employee CRUD operations (Display, Add, Update, Delete).
+- Implemented login authentication with password verification.
+- Used password hashing for secure password storage.
+- Implemented employee search by name and email.
+- Implemented sorting by ID, email, phone number, joined date, and department in admin dashboard.
+- Used SQL JOIN to fetch department information from related tables (employees.d_id → department.id).
+- Implemented session management to maintain user login state.
+- Implemented role-based access control for Admin and Employee users.
+- Restricted employee access to admin-only pages and functionality.
+- Implemented unauthorized access handling for protected pages.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 12, 2026
+
+Accomplishments
+
+Learning: [04:00:00]
+
+- Continued Employee management system.
+- Implemented authentication and authorization across all application pages.
+- Enforced page-level access control based on user roles and permissions.
+- Restricted access to protected resources for unauthenticated users.
+- Enhanced the user interface and overall application design.
+- Implemented profile image upload and management functionality.
+- Applied role-based field restrictions to prevent employees from modifying salary and department information.
+- Prevented authenticated users from accessing the login page and logging in again.
+- These all functionalities are done using session.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 15, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Continued Employee management system...
+- Implemented profile image display and update functionality.
+- Implemented pagination for employee listing.
+- Stored user email in cookies to maintain login state across browser sessions.
+- Removed authentication cookies during logout.
+- Studied SQL Injection vulnerabilities and prevention technique using prepared statements.
+- Studied Cross-Site Scripting (XSS) vulnerabilities.
+- Implemented output escaping using htmlspecialchars().
+- Started learning Object-Oriented Programming (OOP) concepts for MVC architecture.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 16, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Learned API integration using HTTP requests in PHP.
+- Used external APIs using file_get_contents() and cURL.
+- Worked with the DummyJSON API and parsed JSON responses.
+- Learned JSON encoding and decoding using json_encode() and json_decode().
+- Practiced JSON response formatting and debugging.
+- Installed and configured PHPMailer using Composer.
+- Configured Gmail SMTP and Google App Passwords for email delivery.
+- Implemented email sending functionality in Core PHP applications.
+- Implemented automated email notifications using PHPMailer to send employee account details upon successful employee creation.
+- Learned SMTP concepts including authentication, TLS encryption, and SMTP ports.
+- Studied PHPMailer configuration and methods such as setFrom(), addAddress(), Subject, Body, and send().
+- Created a reusable mail configuration and getMailer() function.
+- Learned MVC architecture concepts including Controllers and Views.
+- Improved project structure through proper file organization.
+- Learned PHP typed properties, DocBlocks, and IDE type hinting concepts.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 17, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Learned PHP error types including Parse Errors, Warnings, Notices, and Fatal Errors.
+- Practiced debugging using var_dump(), print_r(), and die().
+- Learned error reporting and error logging techniques.
+- Implemented input validation and error handling in employee details modules.
+- Enhanced login security using email validation, password validation, prepared statements, and password_verify().
+- Implemented duplicate email and phone number validation to prevent creation of employee records with existing credentials.
+- Implemented session regeneration after successful login using session_regenerate_id(true).
+- Learned Session Fixation attacks and prevention techniques.
+- Implemented secure profile image upload with file size, MIME type, and extension validation.
+- Implemented unique file naming using uniqid().
+- Added upload failure handling and rollback mechanisms using unlink().
+- Created a reusable header component and integrated it across all application pages.
+- Implemented conditional navigation links within a single header for Admin and User roles.
+- Moved page-specific CSS into a centralized stylesheet to improve maintainability and reduce code duplication.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 18, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Reviewed PHP Error Handling, Security, and Debugging concepts.
+- Studied code organization, naming conventions, and reusable function design.
+- Explored blog system architecture and created a basic blog UI with images.
+- Analyzed requirements for the Document Access Management System (DAMS).
+- Designed user roles and permissions for Guest, Registered User, and Admin.
+- Designed document sharing and access control workflows.
+- Learned many-to-many database relationships for document permissions.
+- Created database tables for users, documents, permissions, password_resets, and audit_logs.
+- Learned Git fundamentals including commits, remotes, push, and GitHub integration.
+- Created and configured a GitHub repository for the project.
+- Implemented environment variable management using .env and vlucas/phpdotenv.
+- Configured .gitignore to exclude sensitive files from version control.
+- Learned cookie management and Remember Me functionality.
+- Created Register, Login, Logout, and Profile modules.
+- Implemented audit logging for user registration, login, and logout activities.
+- Restricted profile access after logout through session validation.
+- Created a centralized session management file to prevent multiple session_start() conflicts.
+- Configured PHPMailer and email settings for upcoming password reset functionality.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 19, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Implemented Forgot Password functionality using OTP-based account recovery.
+- Validated user email before initiating password reset requests.
+- Generated and stored OTPs in the database with expiration timestamps.
+- Integrated email-based OTP delivery using PHPMailer.
+- Implemented OTP verification with 10-minute expiry validation.
+- Implemented secure password reset workflow with password hashing.
+- Redirected users through a multi-step recovery process (Email → OTP Verification → New Password).
+- Implemented Change Password functionality for authenticated users.
+- Implemented Reset Password functionality.
+- Developed user management features for viewing all registered users.
+- Implemented user activation and deactivation functionality.
+- Implemented bulk user deletion functionality using checkbox selection.
+- Developed an admin password reset module with user selection through a dropdown list.
+- Added access validation middleware for protected routes and pages.
+- Implemented email verification functionality for account security.
+- github: https://github.com/mdobariya3606-prog/document-access-management-system.git
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 20, 2026
+
+Accomplishments
+
+Learning: [04:00:00]
+
+- Created user profile and profile update modules.
+- Added automatic user directory creation during registration in the uploads/users folder.
+- Developed file upload functionality for users.
+- Added an extension column to the document_info table for file type tracking and management.
+- Stored uploaded files using unique filenames generated with uniqid() while preserving the original filename in the database.
+- Added activity logging for file-related operations.
+- Designed and styled the file upload interface.
+- Added drag-and-drop animations and UI enhancements for file uploads.
+- Added automatic user directory removal when an admin deletes a user account.
+- Improved file management workflow and overall user experience.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 22, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Developed secure file download functionality using PHP headers and readfile().
+- Applied document ownership and admin-based authorization for protected downloads.
+- Studied Content-Type, Content-Disposition, and Content-Length headers.
+- Debugged file download issues related to MIME types, filenames, and file paths.
+- Used pathinfo() to manage and display filenames without extensions.
+- Developed document information card UI using HTML, CSS, and CSS Grid.
+- Debugged layout issues related to CSS Grid structure and container placement.
+- Studied composite keys and unique constraints in relational databases.
+- Shared files: SQL queries to retrieve documents shared with users.
+- Shared files:  SQL queries to identify users without access to specific documents.
+- Developed document sharing functionality with permission-based access control.
+- Added enum permissions for shared documents including Download, Share, Rename, Delete, and Full Access.
+- Created file rename functionality with ownership and permission validation.
+- Added secure file deletion functionality with authentication and authorization checks.
+- Integrated download authorization to ensure only permitted users can access shared documents.
+- Explored .htaccess-based access restrictions and secure file storage strategies.
+- Restricted all file-related operations to authorized users, preventing access by guests and unauthorized users.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 23, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Implemented document listing pagination using SQL LIMIT and OFFSET.
+- Added Previous and Next page navigation controls.
+- Calculated total pages dynamically based on document count.
+- Developed per-user storage usage tracking and statistics.
+- View storage usage: Calculated and displayed storage usage in KB and MB formats.
+- Created storage usage progress indicators based on allocated quota.
+- Identify users with high storage consumption > 300 MB with max 400MB limit.
+- Prevent file upload if user don't have enough space.
+- Optimized SQL queries using LEFT JOIN, GROUP BY, and COALESCE().
+- Added functionality to display users with access to shared documents.
+- Designed dashboard modules for document statistics, shared files, storage usage, and recent activity.
+- Configured support for large file uploads through PHP and server settings.
+- Developed storage usage dashboards for both admin and user panels.
+- Added user management functionality for administrators, including user deletion and account status management.
+- Disable sharing for specific users.
+- Added functionality for users to revoke file access previously granted to other users.
+- Created storage usage analytics displaying per-user and overall system storage consumption.
+- github: https://github.com/mdobariya3606-prog/document-access-management-system.git
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 24, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Learned the basics of AJAX and asynchronous requests.
+- Used AJAX to update user status without page refresh.
+- Used AJAX to manage file share access without page refresh.
+- Added live search functionality using AJAX.
+- Updated header navigation and moved related actions to appropriate modules.
+- Added email notification functionality for document sharing invitations.
+- Created an email_queue table to manage pending and sent emails.
+- Created send-email.php to process and send pending emails.
+- Created a share_log table to track document sharing activities.
+- Fixed authentication middleware issues in email-related pages.
+- Updated recent file display logic using ORDER BY DESC.
+- Added total document count statistics to the admin dashboard.
+- Added AJAX-based document deletion in the shared files module.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 25, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Fixed XAMPP crash and restored the development environment.
+- Created a folder management module.
+- Created the `user_folder` table to manage user folders and subfolders.
+- Added a `folder_id` column to the `document_info` table.
+- Added support for creating subfolders for both users and admins.
+- Added file upload support inside subfolders.
+- Created a **My Files** page for admins to manage their uploaded files.
+- Added folder deletion functionality for users.
+- Added automatic folder deletion when a user is deleted by the admin.
+- Updated search, add file, add folder, open folder, and previous folder functionality for the admin **My Files** module.
+- Developed a recursive folder deletion function to remove nested folders and files automatically.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 26, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Improved application-wide error handling by replacing die() with exceptions.
+- Added database transactions and rollback handling for registration, profile updates, file uploads, folder creation, password changes, password resets, sharing, and user deletion.
+- Improved input validation using filter_input(), strict comparisons, and proper form validation.
+- Applied output escaping using htmlspecialchars() to prevent XSS.
+- Added session_regenerate_id(true) after successful login.
+- Improved file upload validation and removed PHP files from allowed upload types.
+- Created reusable helper methods for user folder creation and document handling.
+- Improved recursive folder deletion using a single database transaction.
+- Added automatic cleanup of uploaded files and folders when database operations fail.
+- Improved OTP validation by checking expiration time.
+- Added authorization checks for file sharing, permission revocation, and document access.
+- Merged duplicate admin file management logic into a single files module.
+- Added support for document owners to access their own files without extra permission entries.
+- Created a delete_log table to record document deletion activities.
