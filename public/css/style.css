@@ -368,8 +368,9 @@ button {
    ================================================ */
 .file-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* gap: 20px; */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  padding: 10px;
 }
 
 .file-box {
@@ -377,7 +378,6 @@ button {
   border: 1px solid #ddd;
   border-radius: 8px;
   background: #fff;
-  margin: 10px;
 }
 
 .file-box h3 {
@@ -481,10 +481,6 @@ td {
    RESPONSIVE — TABLET (max 768px)
    ================================================ */
 @media (max-width: 768px) {
-  .file-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .actions {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -534,11 +530,6 @@ td {
   .container .user-table td,
   .container .user-table th {
     padding: 6px 8px;
-  }
-
-  /* Single column file grid */
-  .file-container {
-    grid-template-columns: 1fr;
   }
 
   .actions {

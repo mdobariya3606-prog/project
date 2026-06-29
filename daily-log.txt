@@ -185,3 +185,20 @@ Learning: [08:20:00]
 - Merged duplicate admin file management logic into a single files module.
 - Added support for document owners to access their own files without extra permission entries.
 - Created a delete_log table to record document deletion activities.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Date: June 27, 2026
+
+Accomplishments
+
+Learning: [04:00:00]
+
+- Learned Docker fundamentals, including images, containers, networks, volumes, Dockerfile, Docker Compose, and YAML configuration.
+- Performed Docker hands-on practice using the Apna College testapp repository.
+- Created a Dockerfile for the testapp project.
+- Built a Docker image for the application.
+- Created a docker-compose.yaml file to manage the application.
+- Created and attached a Docker volume for persistent data.
+- Built and ran the application using Docker Compose.
+- Pushed the Docker image to Docker Hub as `ddsmeet/testapp`.
