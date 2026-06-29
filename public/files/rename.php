@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newName = $helper->validate($_POST['file_name']);
 
     $newNameErr = $helper->checkRequire($newName);
-    if (empty($newNameErr) && !preg_match('/^[a-zA-Z0-9()-. ]*$/', $newName)) {
+    if (empty($newNameErr) && !preg_match('/^[a-zA-Z0-9()-._ ]*$/', $newName)) {
         $newNameErr = "Invalid file name";
     }
 
