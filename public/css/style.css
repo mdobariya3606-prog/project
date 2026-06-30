@@ -368,12 +368,14 @@ button {
    ================================================ */
 .file-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   padding: 10px;
 }
 
 .file-box {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -383,11 +385,10 @@ button {
 .file-box h3 {
   margin: 0 0 15px;
   font-size: 18px;
-  word-break: break-word;
 }
 
 .file-box p {
-  margin: 8px 0;
+  margin: 5px 0;
   color: #555;
 }
 
@@ -395,7 +396,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 15px;
+  margin-top: auto;
 }
 
 .navigation {
@@ -481,6 +482,10 @@ td {
    RESPONSIVE — TABLET (max 768px)
    ================================================ */
 @media (max-width: 768px) {
+  .file-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .actions {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -506,6 +511,10 @@ td {
    RESPONSIVE — MOBILE (max 480px)
    ================================================ */
 @media (max-width: 480px) {
+   .file-container {
+    grid-template-columns: 1fr;
+  }
+
   .header {
     padding: 12px;
   }
@@ -530,10 +539,6 @@ td {
   .container .user-table td,
   .container .user-table th {
     padding: 6px 8px;
-  }
-
-  .actions {
-    grid-template-columns: 1fr 1fr;
   }
 
   /* Forms full-width */
