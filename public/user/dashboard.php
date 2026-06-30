@@ -62,7 +62,7 @@ $sharedFiles = $total['total'];
 $storage = $helper->getStorageById($user_id);
 
 $stmt = $conn->prepare('
-    select d.*, u.name, u.can_share 
+    select d.*, u.name
     from document_info d 
     join user_info u 
     on d.owner_id = u.id 
@@ -129,36 +129,37 @@ require '../include/header.php';
                 </tr>
             </table>
 
-            <h2>File types</h2>
-            <table class="profile-table">
-                <tr>
-                    <th>File Type</th>
-                    <th>Count</th>
-                </tr>
-                <?php while ($extRow = $extResult->fetch_assoc()) { ?>
+            <?php if ($totalDocuments > 0) { ?>
+                <h2>File types</h2>
+                <table class="profile-table">
                     <tr>
-                        <td><?php echo htmlspecialchars($extRow['extension']); ?></td>
-                        <td><?php echo $extRow['total']; ?></td>
+                        <th>File Type</th>
+                        <th>Count</th>
                     </tr>
-                <?php } ?>
-            </table>
+                    <?php while ($extRow = $extResult->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($extRow['extension']); ?></td>
+                            <td><?php echo $extRow['total']; ?></td>
+                        </tr>
+                    <?php } ?>
+                </table>
 
-            <h2>Last 5 uploaded files</h2>
+                <h2>Recent Uploads</h2>
 
-            <div class="file-container">
-                <?php if ($result->num_rows > 0) {
-                    while ($file = $result->fetch_assoc()) { ?>
-                        <div class="file-box">
-                            <h3><?php echo htmlspecialchars($file['original_name']); ?></h3>
+                <div class="file-container">
+                    <?php if ($result->num_rows > 0) {
+                        while ($file = $result->fetch_assoc()) { ?>
+                            <div class="file-box">
+                                <h3><?php echo htmlspecialchars($file['original_name']); ?></h3>
 
-                            <p>Type: <?php echo htmlspecialchars($file['extension']); ?></p>
-                            <p>Size: <?php echo round($file['file_size'] / (1024 * 1024), 2); ?> MB</p>
-                            <p>Uploaded: <?php echo date('d-m-Y', strtotime($file['created_at'])); ?></p>
-                        </div>
-                <?php  }
-                } ?>
-            </div>
-
+                                <p>Type: <?php echo htmlspecialchars($file['extension']); ?></p>
+                                <p>Size: <?php echo round($file['file_size'] / (1024 * 1024), 2); ?> MB</p>
+                                <p>Uploaded: <?php echo date('d-m-Y', strtotime($file['created_at'])); ?></p>
+                            </div>
+                    <?php  }
+                    } ?>
+                </div>
+            <?php } ?>
 
         </div>
     </div>

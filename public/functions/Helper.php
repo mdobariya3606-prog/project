@@ -542,12 +542,13 @@ class Helper
         $mail->send();
     }
 
-    function queueMail($sender, $file_name)
+    function queueMail($sender, $receiver, $file_name)
     {
         $sender = ucfirst($sender);
 
-        $body = "$sender have gave you access of $file_name";
-        $recipient = "booknest44@gmail.com";
+        $body = "$sender has given you access of $file_name.";
+
+        $recipient = $receiver;
         $subject = "File Invitation";
         $stmt = $this->conn->prepare('insert into email_queue (recipient, subject, body) values (?, ?, ?)');
 

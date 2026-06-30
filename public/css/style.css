@@ -26,6 +26,9 @@
    HEADER
    ================================================ */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   padding: 10px;
   width: 100%;
   background-color: #fbe4d8;
@@ -85,12 +88,10 @@
    USER TABLE
    ================================================ */
 .container .user-table {
-  /* display: block; */
   padding: 10px;
   border-collapse: collapse;
   text-align: left;
   width: 100%;
-  min-width: 600px;
 }
 
 .container .user-table .name,
@@ -136,15 +137,10 @@ td {
   text-align: left;
 }
 
-/* .profile-table {
-  max-width: 600px;
-} */
-
 /* ================================================
    AUTH FORMS (Login / Register)
    ================================================ */
 
-  
 .auth h1 {
   font-size: 35px;
   font-family: "Remingo";
@@ -570,7 +566,8 @@ td {
   }
 
   .container .user-table {
-    min-width: 480px;
+    /* width: 100%; */
+    max-width: 480px;
     font-size: 13px;
     border: 1px solid #333;
   }

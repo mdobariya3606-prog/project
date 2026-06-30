@@ -1,0 +1,7 @@
+[30-Jun-2026 18:01:03 Asia/Kolkata] PHP Warning:  Uncaught mysqli_sql_exception: MySQL server has gone away in C:\xampp\htdocs\project\public\functions\Helper.php:106
+Stack trace:
+#0 C:\xampp\htdocs\project\public\functions\Helper.php(106): mysqli_stmt->execute()
+#1 C:\xampp\htdocs\project\public\files\add-file.php(54): Helper->addDocument('50m', '1.6a43b34b1d726...', 52530650, 'pdf')
+#2 {main}
+  thrown in C:\xampp\htdocs\project\public\functions\Helper.php on line 106
+[30-Jun-2026 18:01:03 Asia/Kolkata] PHP Fatal error:  Maximum execution time of 300 seconds exceeded in C:\xampp\htdocs\project\public\files\add-file.php on line 54

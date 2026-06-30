@@ -94,7 +94,7 @@ require '../include/header.php';
                 <span class="error"><?php echo htmlspecialchars($message); ?></span>
 
             </div>
-            <button type="submit">Add file</button>
+            <button type="submit">add-file</button>
         </form>
     </div>
 

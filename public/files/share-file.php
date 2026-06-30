@@ -63,10 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $conn->begin_transaction();
         try {
-            foreach ($ids as $id) {
-                $helper->addPermission($id, $document_id, $type);
-                $helper->queueMail($_SESSION['user']['name'], $file['original_name'] . '.' . $file['extension']);
-                $helper->logShare($_SESSION['user']['id'], $id, $document_id);
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $sql = "select id, name, email from  user_info where id in ($placeholders)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($user = $result->fetch_assoc()) {
+                $helper->addPermission($user['id'], $document_id, $type);
+                $helper->queueMail($_SESSION['user']['name'], $user['email'], $file['original_name'] . '.' . $file['extension']);
+                $helper->logShare($_SESSION['user']['id'], $user['id'], $document_id);
             }
             $conn->commit();
         } catch (Exception $e) {
@@ -106,7 +113,7 @@ include '../include/header.php';
                 </select>
 
                 <h2>Users</h2>
-                <table class="user-table" style="width: 400px;">
+                <table class="user-table">
                     <tr>
                         <th class="check">Select Users</th>
                     </tr>

@@ -13,6 +13,7 @@ $users = mysqli_query($conn, 'select u.*, count(d.document_id) as total from use
 
 $storages = $helper->getStoragePerUser();
 $total = $helper->getTotalStorage();
+
 function checkStorage($usage)
 {
     if ($usage >= 300) {

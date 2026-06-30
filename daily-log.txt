@@ -231,16 +231,22 @@ Learning: [08:20:00]
 ------------------------------------------------------------------------------------------------------------------------------------
 
 
-error log instead of showing error to user
-Created a free shared hosting account and generated a test subdomain.
-Exported the local MySQL database as an SQL file.
-Compressed the project into a ZIP archive.
-Uploaded and extracted the project using the hosting File Manager.
-Created a MySQL database and database user on the hosting server.
-Imported the exported SQL database using phpMyAdmin.
-Updated the database configuration with the hosting database credentials.
-Configured PHPMailer to use Gmail SMTP with a Google App Password.
-Verified the deployed application by testing database connectivity and core functionality.
-Configured production error handling by disabling error display and enabling error logging.
-Changed header font to 'Remingo'
-Changed fonts (GoogleSansCode-Regular) for regular text
+Date: June 30, 2026
+
+Accomplishments
+
+Learning: [08:20:00]
+
+- Configured production error handling by logging errors instead of displaying them to users.
+- Deployed the Document Access Management System on doc-vault.freedev.app.
+- Exported the local MySQL database and imported it into the hosting server.
+- Uploaded and deployed the project using the hosting File Manager.
+- Configured the hosting database connection.
+- Configured PHPMailer with Gmail SMTP and a Google App Password.
+- Verified the deployed application by testing database connectivity and core features.
+- Changed the header font to Remingo.
+- Updated the application font to GoogleSansCode-Regular for regular text.
+- Removed unnecessary scrolling from the shared files page on mobile devices.
+- Added the "DocVault" title to the login and registration pages.
+- Updated document sharing emails to send notifications to the actual recipient instead of a dummy email.
+- Made the header sticky for better navigation.
