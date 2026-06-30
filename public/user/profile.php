@@ -54,7 +54,9 @@ require '../include/header.php';
                 <td><?php echo round($storage / (1024 * 1024), 2); ?>MB</td>
             </tr>
         </table>
-        <a href="../user/update-profile.php" class="btn-update">Update profile</a>
+        <div class="div-update-btn">
+            <a href="../user/update-profile.php" class="btn-update">Update profile</a>
+        </div>
     </div>
 </body>
 

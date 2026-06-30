@@ -34,6 +34,10 @@
   min-height: 100px;
 }
 
+.title {
+  user-select: none;
+}
+
 .header h1 {
   font-family: "Remingo";
   margin-bottom: 10px;
@@ -124,9 +128,9 @@ td {
    ================================================ */
 .profile-table {
   border-collapse: collapse;
-  margin: 10px;
-  margin-bottom: 30px;
+  width: 100%;
   max-width: 100%;
+  margin-bottom: 30px;
   text-align: left;
 }
 
@@ -320,9 +324,9 @@ button {
 /* ================================================
    FILE UPLOAD
    ================================================ */
+
 .upload-box {
-  width: 100%;
-  max-width: 500px;
+  width: 80%;
   margin: 20px auto;
   padding: 40px 20px;
   text-align: center;
@@ -437,16 +441,14 @@ button {
 
 .folder-table {
   border-collapse: collapse;
-  width: 50%;
+  width: 100%;
   text-align: center;
-  margin: 10px;
 }
 
 .folder-table tr,
 th,
 td {
   border: 1px solid #ddd;
-  border-radius: 4px;
 }
 
 .folder-table .delete {
@@ -478,6 +480,16 @@ td {
 .curr-folder p {
   font-family: consolas;
   text-decoration: underline;
+}
+
+.folders {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.folders a {
+  margin: 10px;
 }
 
 /* ================================================
@@ -590,8 +602,27 @@ td {
 
   .btn-add-file,
   .btn-update {
-    display: inline-block;
+    width: 200px;
+    display: block;
+    padding: 8px 12px;
     margin: 8px 0;
+  }
+
+  .div-update-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .div-btn-delete {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .div-btn-delete .btn-delete {
+    margin-top: 20px;
+    max-width: 30%;
   }
 
   .permission-type {

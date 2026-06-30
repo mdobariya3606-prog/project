@@ -227,3 +227,20 @@ Learning: [08:20:00]
 - Resolved Git push conflicts caused by the remote repository being ahead.
 - Updated the Git author email and rewrote commit history with the correct email.
 - Cleaned the repository by removing uploaded files from version control.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+error log instead of showing error to user
+Created a free shared hosting account and generated a test subdomain.
+Exported the local MySQL database as an SQL file.
+Compressed the project into a ZIP archive.
+Uploaded and extracted the project using the hosting File Manager.
+Created a MySQL database and database user on the hosting server.
+Imported the exported SQL database using phpMyAdmin.
+Updated the database configuration with the hosting database credentials.
+Configured PHPMailer to use Gmail SMTP with a Google App Password.
+Verified the deployed application by testing database connectivity and core functionality.
+Configured production error handling by disabling error display and enabling error logging.
+Changed header font to 'Remingo'
+Changed fonts (GoogleSansCode-Regular) for regular text

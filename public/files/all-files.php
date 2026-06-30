@@ -11,6 +11,7 @@ $current_path = "";
 
 try {
     $current_path = 'uploads/' . $helper->getFolderPath($_SESSION['folder']['id']);
+    $current_path = ($_SESSION['admin']) ? str_replace('uploads', '', $current_path) : str_replace('uploads/user', '', $current_path);
 } catch (Exception $e) {
     $current_path = 'Unavailable';
 }
@@ -71,8 +72,10 @@ require '../include/header.php';
     <div class="curr-folder">
         <p><span>Current Folder:</span> <?php echo htmlspecialchars($current_path); ?></p>
     </div>
-    <a href="../files/add-folder.php" class="btn-add-file">Add Folder 📁</a>
-    <a href="../files/add-file.php" class="btn-add-file">Add File 📄</a>
+    <div class="folders">
+        <a href="../files/add-folder.php" class="btn-add-file">Add Folder 📁</a>
+        <a href="../files/add-file.php" class="btn-add-file">Add File 📄</a>
+    </div>
 
     <div class="folder-container">
         <table class="folder-table">

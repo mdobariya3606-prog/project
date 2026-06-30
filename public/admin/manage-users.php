@@ -82,7 +82,9 @@ require '../include/header.php';
                                 }
                             } ?>
                     </table>
-                    <button type="submit" class="btn-delete" onclick="return confirm('Sure to delete?')" name="btn-delete">Delete</button>
+                    <div class="div-btn-delete">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Sure to delete?')" name="btn-delete">Delete</button>
+                    </div>
                 </form>
 
                 <h2>Manage Access</h2>
